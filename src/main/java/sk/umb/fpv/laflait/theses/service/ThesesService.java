@@ -6,6 +6,7 @@ import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ThesesService {
@@ -18,6 +19,20 @@ public class ThesesService {
 
     public List<ThesesDetailDTO> getAllTheses() {
         return mapToDtoList(thesesRepository.findAll());
+    }
+
+    public ThesesDetailDTO getThesisByID(Long id) {
+        return mapToDto(getThesisEntityByID(id));
+    }
+
+    private ThesesEntity getThesisEntityByID(Long id) {
+        Optional<ThesesEntity> entity = thesesRepository.findById(id);
+
+        if(entity.isEmpty()) {
+            throw new IllegalArgumentException("Thesis not found. ID: " + id);
+        }
+
+        return entity.get();
     }
 
     public List<ThesesDetailDTO> mapToDtoList(Iterable<ThesesEntity> thesesEntities) {
@@ -34,8 +49,13 @@ public class ThesesService {
     private ThesesDetailDTO mapToDto(ThesesEntity thesisEntity) {
         ThesesDetailDTO dto = new ThesesDetailDTO();
         dto.setId(thesisEntity.getId());
-        dto.setThesis(thesisEntity.getThesis());
+        dto.setTitle(thesisEntity.getTitle());
         dto.setDescription(thesisEntity.getDescription());
+
+        System.out.println("ID: " + dto.getId());
+        System.out.println("Nazov: " + dto.getTitle());
+        System.out.println("Opis: " + dto.getDescription());
+        System.out.println();
 
         return dto;
     }

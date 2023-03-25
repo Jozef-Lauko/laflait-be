@@ -12,7 +12,7 @@ public class ThesesEntity {
     private Long id;
 
     @Column(name = "nazov_t")
-    private String thesis;
+    private String title;
 
     @Column(name = "opis_t")
     private String description;
@@ -25,12 +25,12 @@ public class ThesesEntity {
         this.id = id;
     }
 
-    public String getThesis() {
-        return thesis;
+    public String getTitle() {
+        return title;
     }
 
-    public void setThesis(String thesis) {
-        this.thesis = thesis;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

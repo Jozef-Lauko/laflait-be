@@ -3,7 +3,7 @@ package sk.umb.fpv.laflait.theses.service;
 public class ThesesDetailDTO {
 
     private Long id;
-    private String thesis;
+    private String title;
     private String description;
 
     public Long getId() {
@@ -14,12 +14,12 @@ public class ThesesDetailDTO {
         this.id = id;
     }
 
-    public String getThesis() {
-        return thesis;
+    public String getTitle() {
+        return title;
     }
 
-    public void setThesis(String thesis) {
-        this.thesis = thesis;
+    public void setTitle(String thesis) {
+        this.title = thesis;
     }
 
     public String getDescription() {
