@@ -10,6 +10,7 @@ import sk.umb.fpv.laflait.theses.service.ThesesService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SectionService {
@@ -24,6 +25,21 @@ public class SectionService {
     public List<SectionDetailDTO> getAllSections() {
         return mapToDtoList(sectionRepository.findAll());
     }
+
+    public SectionDetailDTO getSectionByID(Long sectionId) {
+        return mapToDto(getSectionEntityByID(sectionId));
+    }
+
+    private SectionEntity getSectionEntityByID(Long id) {
+        Optional<SectionEntity> entity = sectionRepository.findById(id);
+
+        if(entity.isEmpty()) {
+            throw new IllegalArgumentException("Section not found. ID: " + id);
+        }
+
+        return entity.get();
+    }
+
 
     private List<SectionDetailDTO> mapToDtoList(Iterable<SectionEntity> sectionEntities) {
         List<SectionDetailDTO> sections = new ArrayList<>();
@@ -42,13 +58,29 @@ public class SectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
+        dto.setThesesDetailDTO(mapToDto(thesesRepository.findById(sectionEntity.getId_teza())));
 
-        System.out.println("ID: " + dto.getId());
-        System.out.println("Nazov: " + dto.getTitle());
-        System.out.println("Opis: " + dto.getText());
+        System.out.println("Nazov Tezy: " + dto.getThesesDetailDTO().getTitle());
+        System.out.println("ID_kapitoly: " + dto.getId());
+        System.out.println("Nazov_kapitoly: " + dto.getTitle());
+
+        String[] par = dto.getParagraphs();
+        for(String p : par) {
+            System.out.println(p);
+        }
+
         System.out.println();
 
         return dto;
     }
 
+    private ThesesDetailDTO mapToDto(Optional<ThesesEntity> thesesEntity) {
+        ThesesDetailDTO dto = new ThesesDetailDTO();
+
+        dto.setId(thesesEntity.get().getId());
+        dto.setTitle(thesesEntity.get().getTitle());
+        dto.setDescription(thesesEntity.get().getDescription());
+
+        return dto;
+    }
 }

@@ -18,6 +18,9 @@ public class SectionEntity {
     @Column(name = "text_k")
     private String text;
 
+    @Column(name = "id_teza")
+    private Long id_teza;
+
     public Long getId() {
         return id;
     }
@@ -42,4 +45,11 @@ public class SectionEntity {
         this.text = text;
     }
 
+    public Long getId_teza() {
+        return id_teza;
+    }
+
+    public void setId_teza(Long id_teza) {
+        this.id_teza = id_teza;
+    }
 }
