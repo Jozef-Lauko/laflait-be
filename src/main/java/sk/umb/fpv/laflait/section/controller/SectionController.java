@@ -19,14 +19,14 @@ public class SectionController {
 
     @GetMapping("/api/kapitoly")
     public List<SectionDetailDTO> getSections() {
-        System.out.println("get all sections.");
+        System.out.println("*** GET ALL SECTIONS ***");
 
         return sectionService.getAllSections();
     }
 
     @GetMapping("/api/kapitola/{sectionId}")
     public SectionDetailDTO getSection(@PathVariable Long sectionId) {
-        System.out.println("get section by ID called.");
+        System.out.println("*** GET SECTION BY ID ***");
 
         return sectionService.getSectionByID(sectionId);
     }

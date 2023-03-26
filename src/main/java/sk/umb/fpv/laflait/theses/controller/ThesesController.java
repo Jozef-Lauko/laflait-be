@@ -19,14 +19,14 @@ public class ThesesController {
 
     @GetMapping("/api/tezy")
     public List<ThesesDetailDTO> getTheses() {
-        System.out.println("get all theses.");
+        System.out.println("*** GET ALL THESES ***");
 
         return thesesService.getAllTheses();
     }
 
-    @GetMapping("/api/tezy/{thesisId}")
+    @GetMapping("/api/teza/{thesisId}")
     public ThesesDetailDTO getThesis(@PathVariable Long thesisId) {
-        System.out.println("get thesis by ID called.");
+        System.out.println("*** GET THESIS BY ID ***");
 
         return thesesService.getThesisByID(thesisId);
     }
