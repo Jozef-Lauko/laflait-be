@@ -24,7 +24,7 @@ public class ThesesController {
         return thesesService.getAllTheses();
     }
 
-    @GetMapping("/api/teza/{thesisId}")
+    @GetMapping("/api/tezy/{thesisId}")
     public ThesesDetailDTO getThesis(@PathVariable Long thesisId) {
         System.out.println("*** GET THESIS BY ID ***");
 

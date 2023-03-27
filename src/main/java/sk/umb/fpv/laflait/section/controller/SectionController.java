@@ -24,7 +24,7 @@ public class SectionController {
         return sectionService.getAllSections();
     }
 
-    @GetMapping("/api/kapitola/{sectionId}")
+    @GetMapping("/api/kapitoly/{sectionId}")
     public SectionDetailDTO getSection(@PathVariable Long sectionId) {
         System.out.println("*** GET SECTION BY ID ***");
 
