@@ -5,6 +5,8 @@ import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
 import sk.umb.fpv.laflait.subsection.persistance.entity.SubsectionEntity;
 import sk.umb.fpv.laflait.subsection.persistance.repository.SubsectionRepository;
+import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
+import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,17 @@ public class SubsectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
+        dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
+
+        return dto;
+    }
+
+    private ThesesDetailDTO mapToDto(ThesesEntity thesesEntity) {
+        ThesesDetailDTO dto = new ThesesDetailDTO();
+
+        dto.setId(thesesEntity.getId());
+        dto.setTitle(thesesEntity.getTitle());
+        dto.setDescription(thesesEntity.getDescription());
 
         return dto;
     }
