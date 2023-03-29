@@ -2,7 +2,6 @@ package sk.umb.fpv.laflait.subsection.service;
 
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
-import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
 import sk.umb.fpv.laflait.subsection.persistance.entity.SubsectionEntity;
 import sk.umb.fpv.laflait.subsection.persistance.repository.SubsectionRepository;
@@ -14,11 +13,9 @@ import java.util.Optional;
 @Service
 public class SubsectionService {
     private final SubsectionRepository subsectionRepository;
-    private final SectionRepository sectionRepository;
 
-    public SubsectionService(SubsectionRepository subsectionRepository, SectionRepository sectionRepository) {
+    public SubsectionService(SubsectionRepository subsectionRepository) {
         this.subsectionRepository = subsectionRepository;
-        this.sectionRepository = sectionRepository;
     }
 
 
@@ -57,17 +54,17 @@ public class SubsectionService {
         dto.setId(subsectionEntity.getId());
         dto.setTitle(subsectionEntity.getTitle());
         dto.setText(subsectionEntity.getText());
-        dto.setSectionDetailDTO(mapToDto(sectionRepository.findById(subsectionEntity.getId())));
+        dto.setSectionDetailDTO(mapToDto(subsectionEntity.getSection()));
 
         return dto;
     }
 
-    private SectionDetailDTO mapToDto(Optional<SectionEntity> sectionEntity) {
+    private SectionDetailDTO mapToDto(SectionEntity sectionEntity) {
         SectionDetailDTO dto = new SectionDetailDTO();
 
-        dto.setId(sectionEntity.get().getId());
-        dto.setTitle(sectionEntity.get().getTitle());
-        dto.setText(sectionEntity.get().getText());
+        dto.setId(sectionEntity.getId());
+        dto.setTitle(sectionEntity.getTitle());
+        dto.setText(sectionEntity.getText());
 
         return dto;
     }

@@ -1,10 +1,10 @@
 package sk.umb.fpv.laflait.subsection.persistance.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 
 @Entity(name = "Podkapitoly")
+@Table(name = "podkapitoly")
 public class SubsectionEntity {
 
     @Id
@@ -17,8 +17,9 @@ public class SubsectionEntity {
     @Column(name = "text_pk")
     private String text;
 
-    @Column(name = "id_kapitola")
-    private Long id_kapitola;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_kapitola")
+    private SectionEntity section;
 
     public Long getId() {
         return id;
@@ -44,11 +45,11 @@ public class SubsectionEntity {
         this.text = text;
     }
 
-    public Long getId_kapitola() {
-        return id_kapitola;
+    public SectionEntity getSection() {
+        return section;
     }
 
-    public void setId_kapitola(Long id_kapitola) {
-        this.id_kapitola = id_kapitola;
+    public void setSection(SectionEntity section) {
+        this.section = section;
     }
 }
