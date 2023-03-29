@@ -6,6 +6,7 @@ import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
 import java.util.Set;
 
 @Entity(name = "Kapitoly")
+@Table(name = "kapitoly")
 public class SectionEntity {
 
     @Id
@@ -18,8 +19,9 @@ public class SectionEntity {
     @Column(name = "text_k")
     private String text;
 
-    @Column(name = "id_teza")
-    private Long id_teza;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_teza")
+    private ThesesEntity theses;
 
     public Long getId() {
         return id;
@@ -45,11 +47,13 @@ public class SectionEntity {
         this.text = text;
     }
 
-    public Long getId_teza() {
-        return id_teza;
+
+
+    public ThesesEntity getTheses() {
+        return theses;
     }
 
-    public void setId_teza(Long id_teza) {
-        this.id_teza = id_teza;
+    public void setTheses(ThesesEntity theses) {
+        this.theses = theses;
     }
 }

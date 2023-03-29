@@ -4,9 +4,8 @@ import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
-import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
 import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
-import sk.umb.fpv.laflait.theses.service.ThesesService;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +14,9 @@ import java.util.Optional;
 @Service
 public class SectionService {
     private final SectionRepository sectionRepository;
-    private final ThesesRepository thesesRepository;
 
-    public SectionService(SectionRepository sectionRepository, ThesesRepository thesesRepository) {
+    public SectionService(SectionRepository sectionRepository) {
         this.sectionRepository = sectionRepository;
-        this.thesesRepository = thesesRepository;
     }
 
     public List<SectionDetailDTO> getAllSections() {
@@ -58,7 +55,7 @@ public class SectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
-        dto.setThesesDetailDTO(mapToDto(thesesRepository.findById(sectionEntity.getId_teza())));
+        dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
 
         System.out.println("Nazov Tezy: " + dto.getThesesDetailDTO().getTitle());
         System.out.println("ID_kapitoly: " + dto.getId());
@@ -74,12 +71,12 @@ public class SectionService {
         return dto;
     }
 
-    private ThesesDetailDTO mapToDto(Optional<ThesesEntity> thesesEntity) {
+    private ThesesDetailDTO mapToDto(ThesesEntity thesesEntity) {
         ThesesDetailDTO dto = new ThesesDetailDTO();
 
-        dto.setId(thesesEntity.get().getId());
-        dto.setTitle(thesesEntity.get().getTitle());
-        dto.setDescription(thesesEntity.get().getDescription());
+        dto.setId(thesesEntity.getId());
+        dto.setTitle(thesesEntity.getTitle());
+        dto.setDescription(thesesEntity.getDescription());
 
         return dto;
     }

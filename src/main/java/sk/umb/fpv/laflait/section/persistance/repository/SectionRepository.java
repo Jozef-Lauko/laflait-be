@@ -6,5 +6,4 @@ import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 
 @Repository
 public interface SectionRepository extends CrudRepository<SectionEntity, Long> {
-
 }
