@@ -8,7 +8,7 @@ public class SectionDetailDTO {
 
     private String title;
 
-    private String[] paragraphs;
+    private String text;
 
     private ThesesDetailDTO thesesDetailDTO;
 
@@ -28,12 +28,12 @@ public class SectionDetailDTO {
         this.title = title;
     }
 
-    public String[] getParagraphs() {
-        return paragraphs;
+    public String getText() {
+        return text;
     }
 
     public void setText(String text) {
-        this.paragraphs = text.split("###");
+        this.text = text;
     }
 
     public ThesesDetailDTO getThesesDetailDTO() {

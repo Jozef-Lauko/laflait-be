@@ -57,17 +57,6 @@ public class SectionService {
         dto.setText(sectionEntity.getText());
         dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
 
-        System.out.println("Nazov Tezy: " + dto.getThesesDetailDTO().getTitle());
-        System.out.println("ID_kapitoly: " + dto.getId());
-        System.out.println("Nazov_kapitoly: " + dto.getTitle());
-
-        String[] par = dto.getParagraphs();
-        for(String p : par) {
-            System.out.println(p);
-        }
-
-        System.out.println();
-
         return dto;
     }
 
