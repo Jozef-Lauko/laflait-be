@@ -1,5 +1,7 @@
 package sk.umb.fpv.laflait.section.service;
 
+import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
@@ -37,6 +39,19 @@ public class SectionService {
         return entity.get();
     }
 
+    @Transactional
+    public void updateSectionByID(Long sectionId, SectionRequestDTO sectionRequestDTO) {
+        SectionEntity entity = getSectionEntityByID(sectionId);
+
+        if(!Strings.isEmpty(sectionRequestDTO.getTitle())) {
+            entity.setTitle(sectionRequestDTO.getTitle());
+        }
+        if(!Strings.isEmpty(sectionRequestDTO.getText())) {
+            entity.setText(sectionRequestDTO.getText());
+        }
+
+        sectionRepository.save(entity);
+    }
 
     private List<SectionDetailDTO> mapToDtoList(Iterable<SectionEntity> sectionEntities) {
         List<SectionDetailDTO> sections = new ArrayList<>();
@@ -69,4 +84,6 @@ public class SectionService {
 
         return dto;
     }
+
+
 }
