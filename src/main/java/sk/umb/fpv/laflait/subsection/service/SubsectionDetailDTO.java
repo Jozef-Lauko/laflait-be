@@ -9,7 +9,7 @@ public class SubsectionDetailDTO {
 
     private String title;
 
-    private String[] paragraphs;
+    private String text;
 
     private SectionDetailDTO sectionDetailDTO;
 
@@ -29,12 +29,12 @@ public class SubsectionDetailDTO {
         this.title = title;
     }
 
-    public String[] getParagraphs() {
-        return paragraphs;
+    public String getText() {
+        return text;
     }
 
     public void setText(String text) {
-        this.paragraphs = text.split("###");
+        this.text = text;
     }
 
     public SectionDetailDTO getSectionDetailDTO() {
