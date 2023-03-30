@@ -1,5 +1,6 @@
 package sk.umb.fpv.laflait.theses.service;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
 import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
@@ -35,6 +36,20 @@ public class ThesesService {
         return entity.get();
     }
 
+    public void updateThesis(Long thesisId, ThesesRequestDTO thesesRequestDTO) {
+        ThesesEntity entity = getThesisEntityByID(thesisId);
+
+        if(!Strings.isEmpty(thesesRequestDTO.getTitle())) {
+            entity.setTitle(thesesRequestDTO.getTitle());
+        }
+
+        if(!Strings.isEmpty(thesesRequestDTO.getDescription())) {
+            entity.setDescription(thesesRequestDTO.getDescription());
+        }
+
+        thesesRepository.save(entity);
+    }
+
     public List<ThesesDetailDTO> mapToDtoList(Iterable<ThesesEntity> thesesEntities) {
         List<ThesesDetailDTO> theses = new ArrayList<>();
 
@@ -59,4 +74,5 @@ public class ThesesService {
 
         return dto;
     }
+
 }
