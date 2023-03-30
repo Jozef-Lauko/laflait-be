@@ -1,5 +1,6 @@
 package sk.umb.fpv.laflait.theses.service;
 
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
@@ -36,6 +37,7 @@ public class ThesesService {
         return entity.get();
     }
 
+    @Transactional
     public void updateThesis(Long thesisId, ThesesRequestDTO thesesRequestDTO) {
         ThesesEntity entity = getThesisEntityByID(thesisId);
 
