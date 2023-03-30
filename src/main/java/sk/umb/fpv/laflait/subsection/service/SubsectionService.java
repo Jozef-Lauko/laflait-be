@@ -1,5 +1,7 @@
 package sk.umb.fpv.laflait.subsection.service;
 
+import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
@@ -25,7 +27,7 @@ public class SubsectionService {
         return mapToDtoList(subsectionRepository.findAll());
     }
 
-    public SubsectionDetailDTO getSubsectionBytID(Long subsectionId) {
+    public SubsectionDetailDTO getSubsectionByID(Long subsectionId) {
         return mapToDto(getSubsectionEntityByID(subsectionId));
     }
 
@@ -37,6 +39,21 @@ public class SubsectionService {
         }
 
         return entity.get();
+    }
+
+    @Transactional
+    public void updateSubsectionByID(Long subsectionId, SubsectionRequestDTO subsectionRequestDTO) {
+        SubsectionEntity entity = getSubsectionEntityByID(subsectionId);
+
+        if(!Strings.isEmpty(subsectionRequestDTO.getTitle())) {
+            entity.setTitle(subsectionRequestDTO.getTitle());
+        }
+
+        if(!Strings.isEmpty(subsectionRequestDTO.getText())) {
+            entity.setText(subsectionRequestDTO.getText());
+        }
+
+        subsectionRepository.save(entity);
     }
 
     private List<SubsectionDetailDTO> mapToDtoList(Iterable<SubsectionEntity> subsectionEntities) {
@@ -81,5 +98,6 @@ public class SubsectionService {
 
         return dto;
     }
+
 }
 

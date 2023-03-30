@@ -1,9 +1,8 @@
 package sk.umb.fpv.laflait.subsection.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sk.umb.fpv.laflait.subsection.service.SubsectionDetailDTO;
+import sk.umb.fpv.laflait.subsection.service.SubsectionRequestDTO;
 import sk.umb.fpv.laflait.subsection.service.SubsectionService;
 
 import java.util.List;
@@ -28,6 +27,12 @@ public class SubsectionController {
     public SubsectionDetailDTO getSubsection(@PathVariable Long subsectionId) {
         System.out.println("*** GET SUBSECTION BY ID ***");
 
-        return subsectionService.getSubsectionBytID(subsectionId);
+        return subsectionService.getSubsectionByID(subsectionId);
+    }
+
+    @PutMapping("/api/podkapitoly/{subsectionId}")
+    public void updateSubsection(@PathVariable Long subsectionId, @RequestBody SubsectionRequestDTO subsectionRequestDTO) {
+        System.out.println("*** UPDATE SUBSECTION BY ID ***");
+        subsectionService.updateSubsectionByID(subsectionId, subsectionRequestDTO);
     }
 }
