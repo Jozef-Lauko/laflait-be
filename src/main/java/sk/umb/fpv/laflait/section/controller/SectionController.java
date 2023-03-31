@@ -1,5 +1,6 @@
 package sk.umb.fpv.laflait.section.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
 import sk.umb.fpv.laflait.section.service.SectionRequestDTO;
@@ -31,7 +32,7 @@ public class SectionController {
     }
 
     @PutMapping("/api/kapitoly/{sectionId}")
-    public void updateSection(@PathVariable Long sectionId, @RequestBody SectionRequestDTO sectionRequestDTO) {
+    public void updateSection(@PathVariable Long sectionId, @Valid @RequestBody SectionRequestDTO sectionRequestDTO) {
         System.out.println("*** UPDATE SECTION BY ID ***");
         sectionService.updateSectionByID(sectionId, sectionRequestDTO);
     }

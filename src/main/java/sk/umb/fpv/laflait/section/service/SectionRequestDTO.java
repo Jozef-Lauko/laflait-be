@@ -1,9 +1,15 @@
 package sk.umb.fpv.laflait.section.service;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class SectionRequestDTO {
 
+    @NotBlank(message = "Title must not be empty.")
     private String title;
+    @NotBlank(message = "Text must not be empty.")
     private String text;
+    @NotNull
     private Long thesisID;
 
     public String getTitle() {
