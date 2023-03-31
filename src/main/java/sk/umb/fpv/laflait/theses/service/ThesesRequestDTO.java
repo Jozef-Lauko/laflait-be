@@ -1,8 +1,11 @@
 package sk.umb.fpv.laflait.theses.service;
 
-public class ThesesRequestDTO {
+import jakarta.validation.constraints.NotBlank;
 
+public class ThesesRequestDTO {
+    @NotBlank(message = "Title must not be empty.")
     private String title;
+    @NotBlank(message = "Description must not be empty.")
     private String description;
 
     public String getTitle() {
