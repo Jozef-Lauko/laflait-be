@@ -3,7 +3,9 @@ package sk.umb.fpv.laflait.subsection.service;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
+import sk.umb.fpv.laflait.exception.LaflaitApplicationException;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
+import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
 import sk.umb.fpv.laflait.subsection.persistance.entity.SubsectionEntity;
 import sk.umb.fpv.laflait.subsection.persistance.repository.SubsectionRepository;
@@ -17,9 +19,11 @@ import java.util.Optional;
 @Service
 public class SubsectionService {
     private final SubsectionRepository subsectionRepository;
+    private final SectionRepository sectionRepository;
 
-    public SubsectionService(SubsectionRepository subsectionRepository) {
+    public SubsectionService(SubsectionRepository subsectionRepository, SectionRepository sectionRepository) {
         this.subsectionRepository = subsectionRepository;
+        this.sectionRepository = sectionRepository;
     }
 
 
@@ -53,7 +57,22 @@ public class SubsectionService {
             entity.setText(subsectionRequestDTO.getText());
         }
 
+        if(subsectionRequestDTO.getSectionID() != null) {
+            SectionEntity sectionEntity = mapToEntity(subsectionRequestDTO.getSectionID());
+            entity.setSection(sectionEntity);
+        }
+
         subsectionRepository.save(entity);
+    }
+
+    private SectionEntity mapToEntity(Long sectionID) {
+        Optional<SectionEntity> entity = sectionRepository.findById(sectionID);
+
+        if(entity.isPresent()) {
+            return entity.get();
+        }else{
+            throw new LaflaitApplicationException("SectionID is invalid.");
+        }
     }
 
     private List<SubsectionDetailDTO> mapToDtoList(Iterable<SubsectionEntity> subsectionEntities) {

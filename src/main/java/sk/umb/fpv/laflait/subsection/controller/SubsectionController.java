@@ -1,5 +1,6 @@
 package sk.umb.fpv.laflait.subsection.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import sk.umb.fpv.laflait.subsection.service.SubsectionDetailDTO;
 import sk.umb.fpv.laflait.subsection.service.SubsectionRequestDTO;
@@ -31,7 +32,7 @@ public class SubsectionController {
     }
 
     @PutMapping("/api/podkapitoly/{subsectionId}")
-    public void updateSubsection(@PathVariable Long subsectionId, @RequestBody SubsectionRequestDTO subsectionRequestDTO) {
+    public void updateSubsection(@PathVariable Long subsectionId, @Valid @RequestBody SubsectionRequestDTO subsectionRequestDTO) {
         System.out.println("*** UPDATE SUBSECTION BY ID ***");
         subsectionService.updateSubsectionByID(subsectionId, subsectionRequestDTO);
     }
