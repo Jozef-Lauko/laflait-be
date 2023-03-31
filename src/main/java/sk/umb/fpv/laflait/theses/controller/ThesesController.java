@@ -1,10 +1,10 @@
 package sk.umb.fpv.laflait.theses.controller;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
+import sk.umb.fpv.laflait.theses.service.ThesesRequestDTO;
 import sk.umb.fpv.laflait.theses.service.ThesesService;
 
 import java.util.List;
@@ -29,5 +29,11 @@ public class ThesesController {
         System.out.println("*** GET THESIS BY ID ***");
 
         return thesesService.getThesisByID(thesisId);
+    }
+
+    @PutMapping("/api/tezy/{thesisId}")
+    public void updateThesis(@PathVariable Long thesisId, @Valid @RequestBody ThesesRequestDTO thesesRequestDTO){
+        System.out.println("*** UPDATE THESIS BY ID ***");
+        thesesService.updateThesis(thesisId, thesesRequestDTO);
     }
 }
