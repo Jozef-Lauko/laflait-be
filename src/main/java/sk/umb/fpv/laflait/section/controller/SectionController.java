@@ -1,9 +1,9 @@
 package sk.umb.fpv.laflait.section.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
+import sk.umb.fpv.laflait.section.service.SectionRequestDTO;
 import sk.umb.fpv.laflait.section.service.SectionService;
 import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
 
@@ -29,5 +29,11 @@ public class SectionController {
         System.out.println("*** GET SECTION BY ID ***");
 
         return sectionService.getSectionByID(sectionId);
+    }
+
+    @PutMapping("/api/kapitoly/{sectionId}")
+    public void updateSection(@PathVariable Long sectionId, @Valid @RequestBody SectionRequestDTO sectionRequestDTO) {
+        System.out.println("*** UPDATE SECTION BY ID ***");
+        sectionService.updateSectionByID(sectionId, sectionRequestDTO);
     }
 }

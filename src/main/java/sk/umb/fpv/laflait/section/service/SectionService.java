@@ -1,9 +1,13 @@
 package sk.umb.fpv.laflait.section.service;
 
+import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
+import sk.umb.fpv.laflait.exception.LaflaitApplicationException;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
+import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
 import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
 
 
@@ -14,9 +18,11 @@ import java.util.Optional;
 @Service
 public class SectionService {
     private final SectionRepository sectionRepository;
+    private final ThesesRepository thesesRepository;
 
-    public SectionService(SectionRepository sectionRepository) {
+    public SectionService(SectionRepository sectionRepository, ThesesRepository thesesRepository) {
         this.sectionRepository = sectionRepository;
+        this.thesesRepository = thesesRepository;
     }
 
     public List<SectionDetailDTO> getAllSections() {
@@ -37,6 +43,33 @@ public class SectionService {
         return entity.get();
     }
 
+    @Transactional
+    public void updateSectionByID(Long sectionId, SectionRequestDTO sectionRequestDTO) {
+        SectionEntity entity = getSectionEntityByID(sectionId);
+
+        if(!Strings.isEmpty(sectionRequestDTO.getTitle())) {
+            entity.setTitle(sectionRequestDTO.getTitle());
+        }
+        if(!Strings.isEmpty(sectionRequestDTO.getText())) {
+            entity.setText(sectionRequestDTO.getText());
+        }
+        if(sectionRequestDTO.getThesisID() != null) {
+            ThesesEntity thesesEntity = mapToEntity(sectionRequestDTO.getThesisID());
+            entity.setTheses(thesesEntity);
+        }
+
+        sectionRepository.save(entity);
+    }
+
+    private ThesesEntity mapToEntity(Long thesisID) {
+        Optional<ThesesEntity> entity = thesesRepository.findById(thesisID);
+
+        if(entity.isPresent()) {
+            return entity.get();
+        }else{
+            throw new LaflaitApplicationException("ThesisID is invalid.");
+        }
+    }
 
     private List<SectionDetailDTO> mapToDtoList(Iterable<SectionEntity> sectionEntities) {
         List<SectionDetailDTO> sections = new ArrayList<>();
@@ -57,17 +90,6 @@ public class SectionService {
         dto.setText(sectionEntity.getText());
         dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
 
-        System.out.println("Nazov Tezy: " + dto.getThesesDetailDTO().getTitle());
-        System.out.println("ID_kapitoly: " + dto.getId());
-        System.out.println("Nazov_kapitoly: " + dto.getTitle());
-
-        String[] par = dto.getParagraphs();
-        for(String p : par) {
-            System.out.println(p);
-        }
-
-        System.out.println();
-
         return dto;
     }
 
@@ -80,4 +102,6 @@ public class SectionService {
 
         return dto;
     }
+
+
 }

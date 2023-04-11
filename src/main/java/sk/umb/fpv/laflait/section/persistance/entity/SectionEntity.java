@@ -47,8 +47,6 @@ public class SectionEntity {
         this.text = text;
     }
 
-
-
     public ThesesEntity getTheses() {
         return theses;
     }
