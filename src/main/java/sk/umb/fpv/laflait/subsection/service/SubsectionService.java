@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.exception.LaflaitApplicationException;
+import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
+import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
@@ -92,7 +94,30 @@ public class SubsectionService {
         dto.setId(subsectionEntity.getId());
         dto.setTitle(subsectionEntity.getTitle());
         dto.setText(subsectionEntity.getText());
-        dto.setSectionDetailDTO(mapToDto(subsectionEntity.getSection()));
+
+        if(subsectionEntity.getSection() != null){
+            dto.setSectionDetailDTO(mapToDto(subsectionEntity.getSection()));
+        }else{
+            dto.setSectionDetailDTO(new SectionDetailDTO());
+        }
+
+        if(subsectionEntity.getNotes() != null) {
+            dto.setNotesDetailDTO(mapToDto(subsectionEntity.getNotes()));
+        }else{
+            dto.setNotesDetailDTO(new NotesDetailDTO());
+        }
+
+        return dto;
+    }
+
+    private NotesDetailDTO mapToDto(NotesEntity notesEntity) {
+        NotesDetailDTO dto = new NotesDetailDTO();
+
+        dto.setId(notesEntity.getId());
+        dto.setText(notesEntity.getText());
+        dto.setCode(notesEntity.getCode());
+        dto.setLinks(notesEntity.getLinks());
+        dto.setImages(notesEntity.getImages());
 
         return dto;
     }

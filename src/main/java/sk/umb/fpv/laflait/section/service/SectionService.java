@@ -4,6 +4,9 @@ import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.exception.LaflaitApplicationException;
+import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
+import sk.umb.fpv.laflait.notes.persistance.repository.NotesRepository;
+import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
@@ -19,10 +22,12 @@ import java.util.Optional;
 public class SectionService {
     private final SectionRepository sectionRepository;
     private final ThesesRepository thesesRepository;
+    private final NotesRepository notesRepository;
 
-    public SectionService(SectionRepository sectionRepository, ThesesRepository thesesRepository) {
+    public SectionService(SectionRepository sectionRepository, ThesesRepository thesesRepository, NotesRepository notesRepository) {
         this.sectionRepository = sectionRepository;
         this.thesesRepository = thesesRepository;
+        this.notesRepository = notesRepository;
     }
 
     public List<SectionDetailDTO> getAllSections() {
@@ -88,7 +93,30 @@ public class SectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
-        dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
+
+        if(sectionEntity.getTheses() != null){
+            dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
+        }else{
+            dto.setThesesDetailDTO(new ThesesDetailDTO());
+        }
+
+        if(sectionEntity.getNotes() != null) {
+            dto.setNotesDetailDTO(mapToDto(sectionEntity.getNotes()));
+        }else{
+            dto.setNotesDetailDTO(new NotesDetailDTO());
+        }
+
+        return dto;
+    }
+
+    private NotesDetailDTO mapToDto(NotesEntity notesEntity) {
+        NotesDetailDTO dto = new NotesDetailDTO();
+
+        dto.setId(notesEntity.getId());
+        dto.setText(notesEntity.getText());
+        dto.setCode(notesEntity.getCode());
+        dto.setLinks(notesEntity.getLinks());
+        dto.setImages(notesEntity.getImages());
 
         return dto;
     }
@@ -102,6 +130,4 @@ public class SectionService {
 
         return dto;
     }
-
-
 }

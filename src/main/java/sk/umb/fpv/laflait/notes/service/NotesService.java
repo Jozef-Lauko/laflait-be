@@ -16,21 +16,6 @@ public class NotesService {
         this.notesRepository = notesRepository;
     }
 
-    public List<NotesDetailDTO> getAllNotes() {
-        return mapToDtoList(notesRepository.findAll());
-    }
-
-    private List<NotesDetailDTO> mapToDtoList(Iterable<NotesEntity> entities) {
-        List<NotesDetailDTO> notes = new ArrayList<>();
-
-        entities.forEach(notesEntity -> {
-            NotesDetailDTO dto = mapToDto(notesEntity);
-            notes.add(dto);
-        });
-
-        return notes;
-    }
-
     private NotesDetailDTO mapToDto(NotesEntity notesEntity) {
         NotesDetailDTO dto = new NotesDetailDTO();
 

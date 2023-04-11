@@ -4,13 +4,13 @@ public class NotesDetailDTO {
 
     private Long id;
 
-    private String[] paragraphs;
+    private String text;
 
-    private String[] images;
+    private String images;
 
-    private String[] links;
+    private String links;
 
-    private String[] code;
+    private String code;
 
     public Long getId() {
         return id;
@@ -20,35 +20,35 @@ public class NotesDetailDTO {
         this.id = id;
     }
 
-    public String[] getParagraphs() {
-        return paragraphs;
+    public String getText() {
+        return text;
     }
 
     public void setText(String text) {
-        this.paragraphs = text.split("###");
+        this.text = text;
     }
 
-    public String[] getImages() {
+    public String getImages() {
         return images;
     }
 
     public void setImages(String images) {
-        this.images = images.split("###");
+        this.images = images;
     }
 
-    public String[] getLinks() {
+    public String getLinks() {
         return links;
     }
 
     public void setLinks(String links) {
-        this.links = links.split("###");
+        this.links = links;
     }
 
-    public String[] getCode() {
+    public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
-        this.code = code.split("###");
+        this.code = code;
     }
 }

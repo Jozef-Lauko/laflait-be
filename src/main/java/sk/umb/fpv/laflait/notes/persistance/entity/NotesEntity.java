@@ -15,7 +15,7 @@ public class NotesEntity {
     @Column(name = "text_p")
     private String text;
 
-    @Column(name = "images")
+    @Column(name = "image")
     private String images;
 
     @Column(name = "link")
@@ -24,13 +24,6 @@ public class NotesEntity {
     @Column(name = "code")
     private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_kapitola")
-    private SectionEntity section;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_podkapitola")
-    private SubsectionEntity subsection;
 
     public Long getId() {
         return id;
@@ -72,19 +65,4 @@ public class NotesEntity {
         this.code = code;
     }
 
-    public SectionEntity getSection() {
-        return section;
-    }
-
-    public void setSection(SectionEntity section) {
-        this.section = section;
-    }
-
-    public SubsectionEntity getSubsection() {
-        return subsection;
-    }
-
-    public void setSubsection(SubsectionEntity subsection) {
-        this.subsection = subsection;
-    }
 }

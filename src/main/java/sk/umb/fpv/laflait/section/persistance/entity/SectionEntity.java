@@ -1,6 +1,8 @@
 package sk.umb.fpv.laflait.section.persistance.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
 
 import java.util.Set;
@@ -22,6 +24,10 @@ public class SectionEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_teza")
     private ThesesEntity theses;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_poznamky")
+    private NotesEntity notes;
 
     public Long getId() {
         return id;
@@ -53,5 +59,13 @@ public class SectionEntity {
 
     public void setTheses(ThesesEntity theses) {
         this.theses = theses;
+    }
+
+    public NotesEntity getNotes() {
+        return notes;
+    }
+
+    public void setNotes(NotesEntity notesEntity) {
+        this.notes = notesEntity;
     }
 }

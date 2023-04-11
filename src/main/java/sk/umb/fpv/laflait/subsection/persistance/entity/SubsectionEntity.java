@@ -1,6 +1,7 @@
 package sk.umb.fpv.laflait.subsection.persistance.entity;
 
 import jakarta.persistence.*;
+import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 
 @Entity(name = "Podkapitoly")
@@ -20,6 +21,10 @@ public class SubsectionEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_kapitola")
     private SectionEntity section;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_poznamky")
+    private NotesEntity notes;
 
     public Long getId() {
         return id;
@@ -51,5 +56,13 @@ public class SubsectionEntity {
 
     public void setSection(SectionEntity section) {
         this.section = section;
+    }
+
+    public NotesEntity getNotes() {
+        return notes;
+    }
+
+    public void setNotes(NotesEntity notesEntity) {
+        this.notes = notesEntity;
     }
 }
