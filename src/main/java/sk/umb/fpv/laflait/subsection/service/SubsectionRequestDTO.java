@@ -10,6 +10,8 @@ public class SubsectionRequestDTO {
     private String text;
     @NotNull
     private Long sectionID;
+    @NotNull
+    private Long notesID;
     public String getTitle() {
         return title;
     }
@@ -32,5 +34,13 @@ public class SubsectionRequestDTO {
 
     public void setSectionID(Long sectionID) {
         this.sectionID = sectionID;
+    }
+
+    public Long getNotesID() {
+        return notesID;
+    }
+
+    public void setNotesID(Long notesID) {
+        this.notesID = notesID;
     }
 }
