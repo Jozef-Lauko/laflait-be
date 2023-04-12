@@ -59,20 +59,34 @@ public class SectionService {
             entity.setText(sectionRequestDTO.getText());
         }
         if(sectionRequestDTO.getThesisID() != null) {
-            ThesesEntity thesesEntity = mapToEntity(sectionRequestDTO.getThesisID());
+            ThesesEntity thesesEntity = mapToThesisEntity(sectionRequestDTO.getThesisID());
             entity.setTheses(thesesEntity);
+        }
+        if(sectionRequestDTO.getNotesID() != null) {
+            NotesEntity notesEntity = mapToNotesEntity(sectionRequestDTO.getNotesID());
+            entity.setNotes(notesEntity);
         }
 
         sectionRepository.save(entity);
     }
 
-    private ThesesEntity mapToEntity(Long thesisID) {
+    private ThesesEntity mapToThesisEntity(Long thesisID) {
         Optional<ThesesEntity> entity = thesesRepository.findById(thesisID);
 
         if(entity.isPresent()) {
             return entity.get();
         }else{
             throw new LaflaitApplicationException("ThesisID is invalid.");
+        }
+    }
+
+    private NotesEntity mapToNotesEntity(Long notesID) {
+        Optional<NotesEntity> entity = notesRepository.findById(notesID);
+
+        if(entity.isPresent()) {
+            return entity.get();
+        }else{
+            throw new LaflaitApplicationException("NotesID is invalid.");
         }
     }
 
