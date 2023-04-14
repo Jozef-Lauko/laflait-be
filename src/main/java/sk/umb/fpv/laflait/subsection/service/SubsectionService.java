@@ -4,6 +4,9 @@ import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.exception.LaflaitApplicationException;
+import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
+import sk.umb.fpv.laflait.notes.persistance.repository.NotesRepository;
+import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
@@ -20,10 +23,12 @@ import java.util.Optional;
 public class SubsectionService {
     private final SubsectionRepository subsectionRepository;
     private final SectionRepository sectionRepository;
+    private final NotesRepository notesRepository;
 
-    public SubsectionService(SubsectionRepository subsectionRepository, SectionRepository sectionRepository) {
+    public SubsectionService(SubsectionRepository subsectionRepository, SectionRepository sectionRepository, NotesRepository notesRepository) {
         this.subsectionRepository = subsectionRepository;
         this.sectionRepository = sectionRepository;
+        this.notesRepository = notesRepository;
     }
 
 
@@ -62,6 +67,11 @@ public class SubsectionService {
             entity.setSection(sectionEntity);
         }
 
+        if(subsectionRequestDTO.getNotesID() != null) {
+            NotesEntity notesEntity = mapToNotesEntity(subsectionRequestDTO.getNotesID());
+            entity.setNotes(notesEntity);
+        }
+
         subsectionRepository.save(entity);
     }
 
@@ -72,6 +82,16 @@ public class SubsectionService {
             return entity.get();
         }else{
             throw new LaflaitApplicationException("SectionID is invalid.");
+        }
+    }
+
+    private NotesEntity mapToNotesEntity(Long notesID) {
+        Optional<NotesEntity> entity = notesRepository.findById(notesID);
+
+        if(entity.isPresent()) {
+            return entity.get();
+        }else{
+            throw new LaflaitApplicationException("NotesID is invalid.");
         }
     }
 
@@ -92,7 +112,30 @@ public class SubsectionService {
         dto.setId(subsectionEntity.getId());
         dto.setTitle(subsectionEntity.getTitle());
         dto.setText(subsectionEntity.getText());
-        dto.setSectionDetailDTO(mapToDto(subsectionEntity.getSection()));
+
+        if(subsectionEntity.getSection() != null){
+            dto.setSectionDetailDTO(mapToDto(subsectionEntity.getSection()));
+        }else{
+            dto.setSectionDetailDTO(new SectionDetailDTO());
+        }
+
+        if(subsectionEntity.getNotes() != null) {
+            dto.setNotesDetailDTO(mapToDto(subsectionEntity.getNotes()));
+        }else{
+            dto.setNotesDetailDTO(new NotesDetailDTO());
+        }
+
+        return dto;
+    }
+
+    private NotesDetailDTO mapToDto(NotesEntity notesEntity) {
+        NotesDetailDTO dto = new NotesDetailDTO();
+
+        dto.setId(notesEntity.getId());
+        dto.setText(notesEntity.getText());
+        dto.setCode(notesEntity.getCode());
+        dto.setLinks(notesEntity.getLinks());
+        dto.setImages(notesEntity.getImages());
 
         return dto;
     }

@@ -11,6 +11,8 @@ public class SectionRequestDTO {
     private String text;
     @NotNull
     private Long thesisID;
+    @NotNull
+    private Long notesID;
 
     public String getTitle() {
         return title;
@@ -34,5 +36,13 @@ public class SectionRequestDTO {
 
     public void setThesisID(Long thesisID) {
         this.thesisID = thesisID;
+    }
+
+    public Long getNotesID() {
+        return notesID;
+    }
+
+    public void setNotesID(Long notesID) {
+        this.notesID = notesID;
     }
 }

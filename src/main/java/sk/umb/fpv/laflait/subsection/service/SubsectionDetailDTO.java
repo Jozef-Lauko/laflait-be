@@ -1,6 +1,7 @@
 package sk.umb.fpv.laflait.subsection.service;
 
 import jakarta.persistence.Column;
+import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
 
 public class SubsectionDetailDTO {
@@ -12,6 +13,8 @@ public class SubsectionDetailDTO {
     private String text;
 
     private SectionDetailDTO sectionDetailDTO;
+
+    private NotesDetailDTO notesDetailDTO;
 
     public Long getId() {
         return id;
@@ -43,5 +46,13 @@ public class SubsectionDetailDTO {
 
     public void setSectionDetailDTO(SectionDetailDTO sectionDetailDTO) {
         this.sectionDetailDTO = sectionDetailDTO;
+    }
+
+    public NotesDetailDTO getNotesDetailDTO() {
+        return notesDetailDTO;
+    }
+
+    public void setNotesDetailDTO(NotesDetailDTO notesDetailDTO) {
+        this.notesDetailDTO = notesDetailDTO;
     }
 }
