@@ -129,7 +129,6 @@ public class SectionService {
         dto.setId(notesEntity.getId());
         dto.setText(notesEntity.getText());
         dto.setCode(notesEntity.getCode());
-        dto.setLinks(notesEntity.getLinks());
         dto.setImages(notesEntity.getImages());
 
         return dto;

@@ -18,9 +18,6 @@ public class NotesEntity {
     @Column(name = "image")
     private String images;
 
-    @Column(name = "link")
-    private String links;
-
     @Column(name = "code")
     private String code;
 
@@ -47,14 +44,6 @@ public class NotesEntity {
 
     public void setImages(String images) {
         this.images = images;
-    }
-
-    public String getLinks() {
-        return links;
-    }
-
-    public void setLinks(String links) {
-        this.links = links;
     }
 
     public String getCode() {
