@@ -15,8 +15,9 @@ public class NotesEntity {
     @Column(name = "text_p")
     private String text;
 
+    @Lob
     @Column(name = "image")
-    private String images;
+    private byte[] imageData;
 
     @Column(name = "code")
     private String code;
@@ -38,12 +39,12 @@ public class NotesEntity {
         this.text = text;
     }
 
-    public String getImages() {
-        return images;
+    public byte[] getImageData() {
+        return imageData;
     }
 
-    public void setImages(String images) {
-        this.images = images;
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 
     public String getCode() {

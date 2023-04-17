@@ -134,7 +134,7 @@ public class SubsectionService {
         dto.setId(notesEntity.getId());
         dto.setText(notesEntity.getText());
         dto.setCode(notesEntity.getCode());
-        dto.setImages(notesEntity.getImages());
+        dto.setImageData(notesEntity.getImageData());
 
         return dto;
     }
