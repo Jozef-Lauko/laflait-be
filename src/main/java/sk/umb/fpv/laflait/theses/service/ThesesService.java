@@ -2,6 +2,11 @@ package sk.umb.fpv.laflait.theses.service;
 
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
 import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
@@ -19,11 +24,20 @@ public class ThesesService {
         this.thesesRepository = thesesRepository;
     }
 
+    @Secured({"admin", "user"})
     public List<ThesesDetailDTO> getAllTheses() {
         return mapToDtoList(thesesRepository.findAll());
     }
-
+    @Secured({"admin", "user"})
     public ThesesDetailDTO getThesisByID(Long id) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                System.out.println(authority.getAuthority());
+            }
+        }
+
         return mapToDto(getThesisEntityByID(id));
     }
 
@@ -38,6 +52,7 @@ public class ThesesService {
     }
 
     @Transactional
+    @Secured({"admin"})
     public void updateThesis(Long thesisId, ThesesRequestDTO thesesRequestDTO) {
         ThesesEntity entity = getThesisEntityByID(thesisId);
 
