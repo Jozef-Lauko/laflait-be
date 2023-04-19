@@ -24,11 +24,10 @@ public class ThesesService {
         this.thesesRepository = thesesRepository;
     }
 
-    @Secured({"admin", "user"})
+    @PreAuthorize("hasRole('admin')")
     public List<ThesesDetailDTO> getAllTheses() {
         return mapToDtoList(thesesRepository.findAll());
     }
-    @Secured({"admin", "user"})
     public ThesesDetailDTO getThesisByID(Long id) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,7 +51,6 @@ public class ThesesService {
     }
 
     @Transactional
-    @Secured({"admin"})
     public void updateThesis(Long thesisId, ThesesRequestDTO thesesRequestDTO) {
         ThesesEntity entity = getThesisEntityByID(thesisId);
 

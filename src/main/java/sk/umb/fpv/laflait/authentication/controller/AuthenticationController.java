@@ -46,6 +46,7 @@ public class AuthenticationController {
 
     @DeleteMapping("/api/token")
     public void logoff(@RequestHeader(value = AUTHORIZATION_HEADER, required = true) Optional<String> authentication) {
+        System.out.println("Tu je toke: " + authentication.get());
         String token = authentication.get().substring("Bearer".length()).trim();
         authenticationService.tokenRemove(token);
     }
