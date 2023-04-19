@@ -24,7 +24,7 @@ public class ThesesService {
         this.thesesRepository = thesesRepository;
     }
 
-    @PreAuthorize("hasRole('admin')")
+//    @PreAuthorize("hasRole('admin')")
     public List<ThesesDetailDTO> getAllTheses() {
         return mapToDtoList(thesesRepository.findAll());
     }

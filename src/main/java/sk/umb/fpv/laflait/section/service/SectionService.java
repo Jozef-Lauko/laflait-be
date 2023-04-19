@@ -30,10 +30,6 @@ public class SectionService {
         this.notesRepository = notesRepository;
     }
 
-    public List<SectionDetailDTO> getAllSections() {
-        return mapToDtoList(sectionRepository.findAll());
-    }
-
     public SectionDetailDTO getSectionByID(Long sectionId) {
         return mapToDto(getSectionEntityByID(sectionId));
     }
@@ -58,16 +54,13 @@ public class SectionService {
         if(!Strings.isEmpty(sectionRequestDTO.getText())) {
             entity.setText(sectionRequestDTO.getText());
         }
-        if(sectionRequestDTO.getThesisID() != null) {
-            ThesesEntity thesesEntity = mapToThesisEntity(sectionRequestDTO.getThesisID());
-            entity.setTheses(thesesEntity);
-        }
-        if(sectionRequestDTO.getNotesID() != null) {
-            NotesEntity notesEntity = mapToNotesEntity(sectionRequestDTO.getNotesID());
-            entity.setNotes(notesEntity);
-        }
+        //TODO
 
         sectionRepository.save(entity);
+    }
+
+    public List<SectionDetailDTO> getSectionsByThesisID(Long thesisID) {
+        return mapToDtoList(sectionRepository.findAllByTeza(thesisID));
     }
 
     private ThesesEntity mapToThesisEntity(Long thesisID) {
@@ -107,40 +100,10 @@ public class SectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
-
-        if(sectionEntity.getTheses() != null){
-            dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
-        }else{
-            dto.setThesesDetailDTO(new ThesesDetailDTO());
-        }
-
-        if(sectionEntity.getNotes() != null) {
-            dto.setNotesDetailDTO(mapToDto(sectionEntity.getNotes()));
-        }else{
-            dto.setNotesDetailDTO(new NotesDetailDTO());
-        }
+        dto.setThesesID(sectionEntity.getThesesID());
+        dto.setNotesID(sectionEntity.getNotesID());
 
         return dto;
     }
 
-    private NotesDetailDTO mapToDto(NotesEntity notesEntity) {
-        NotesDetailDTO dto = new NotesDetailDTO();
-
-        dto.setId(notesEntity.getId());
-        dto.setText(notesEntity.getText());
-        dto.setCode(notesEntity.getCode());
-        dto.setImageData(notesEntity.getImageData());
-
-        return dto;
-    }
-
-    private ThesesDetailDTO mapToDto(ThesesEntity thesesEntity) {
-        ThesesDetailDTO dto = new ThesesDetailDTO();
-
-        dto.setId(thesesEntity.getId());
-        dto.setTitle(thesesEntity.getTitle());
-        dto.setDescription(thesesEntity.getDescription());
-
-        return dto;
-    }
 }

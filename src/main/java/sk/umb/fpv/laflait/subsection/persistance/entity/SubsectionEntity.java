@@ -18,9 +18,12 @@ public class SubsectionEntity {
     @Column(name = "text_pk")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_kapitola")
-    private SectionEntity section;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id_kapitola")
+//    private SectionEntity section;
+
+    @Column(name = "id_kapitola")
+    private Long sectionID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_poznamky")
@@ -50,19 +53,19 @@ public class SubsectionEntity {
         this.text = text;
     }
 
-    public SectionEntity getSection() {
-        return section;
-    }
-
-    public void setSection(SectionEntity section) {
-        this.section = section;
-    }
-
     public NotesEntity getNotes() {
         return notes;
     }
 
     public void setNotes(NotesEntity notesEntity) {
         this.notes = notesEntity;
+    }
+
+    public Long getSectionID() {
+        return sectionID;
+    }
+
+    public void setSectionID(Long thesesID) {
+        this.sectionID = thesesID;
     }
 }

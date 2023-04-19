@@ -62,10 +62,10 @@ public class SubsectionService {
             entity.setText(subsectionRequestDTO.getText());
         }
 
-        if(subsectionRequestDTO.getSectionID() != null) {
-            SectionEntity sectionEntity = mapToEntity(subsectionRequestDTO.getSectionID());
-            entity.setSection(sectionEntity);
-        }
+//        if(subsectionRequestDTO.getSectionID() != null) {
+//            SectionEntity sectionEntity = mapToEntity(subsectionRequestDTO.getSectionID());
+//            entity.setSection(sectionEntity);
+//        }
 
         if(subsectionRequestDTO.getNotesID() != null) {
             NotesEntity notesEntity = mapToNotesEntity(subsectionRequestDTO.getNotesID());
@@ -112,12 +112,7 @@ public class SubsectionService {
         dto.setId(subsectionEntity.getId());
         dto.setTitle(subsectionEntity.getTitle());
         dto.setText(subsectionEntity.getText());
-
-        if(subsectionEntity.getSection() != null){
-            dto.setSectionDetailDTO(mapToDto(subsectionEntity.getSection()));
-        }else{
-            dto.setSectionDetailDTO(new SectionDetailDTO());
-        }
+        dto.setSectionID(subsectionEntity.getSectionID());
 
         if(subsectionEntity.getNotes() != null) {
             dto.setNotesDetailDTO(mapToDto(subsectionEntity.getNotes()));
@@ -145,7 +140,7 @@ public class SubsectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
-        dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
+//        dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
 
         return dto;
     }
@@ -160,5 +155,8 @@ public class SubsectionService {
         return dto;
     }
 
+    public List<SubsectionDetailDTO> getAllSubsectionsBySectionID(Long sectionID) {
+        return mapToDtoList(subsectionRepository.findAllByKapitola(sectionID));
+    }
 }
 

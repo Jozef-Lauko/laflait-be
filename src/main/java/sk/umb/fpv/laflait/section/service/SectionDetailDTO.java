@@ -11,9 +11,9 @@ public class SectionDetailDTO {
 
     private String text;
 
-    private ThesesDetailDTO thesesDetailDTO;
+    private Long thesesID;
 
-    private NotesDetailDTO notesDetailDTO;
+    private Long notesID;
 
     public Long getId() {
         return id;
@@ -39,19 +39,19 @@ public class SectionDetailDTO {
         this.text = text;
     }
 
-    public ThesesDetailDTO getThesesDetailDTO() {
-        return thesesDetailDTO;
+    public Long getNotesID() {
+        return notesID;
     }
 
-    public void setThesesDetailDTO(ThesesDetailDTO thesesDetailDTO) {
-        this.thesesDetailDTO = thesesDetailDTO;
+    public void setNotesID(Long notesID) {
+        this.notesID = notesID;
     }
 
-    public NotesDetailDTO getNotesDetailDTO() {
-        return notesDetailDTO;
+    public Long getThesesID() {
+        return thesesID;
     }
 
-    public void setNotesDetailDTO(NotesDetailDTO notesDetailDTO) {
-        this.notesDetailDTO = notesDetailDTO;
+    public void setThesesID(Long thesesID) {
+        this.thesesID = thesesID;
     }
 }
