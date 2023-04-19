@@ -6,9 +6,7 @@ public class NotesDetailDTO {
 
     private String text;
 
-    private String images;
-
-    private String links;
+    private byte[] imageData;
 
     private String code;
 
@@ -28,20 +26,12 @@ public class NotesDetailDTO {
         this.text = text;
     }
 
-    public String getImages() {
-        return images;
+    public byte[] getImageData() {
+        return imageData;
     }
 
-    public void setImages(String images) {
-        this.images = images;
-    }
-
-    public String getLinks() {
-        return links;
-    }
-
-    public void setLinks(String links) {
-        this.links = links;
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 
     public String getCode() {

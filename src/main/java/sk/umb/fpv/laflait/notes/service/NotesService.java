@@ -21,8 +21,7 @@ public class NotesService {
 
         dto.setId(notesEntity.getId());
         dto.setText(notesEntity.getText());
-        dto.setImages(notesEntity.getImages());
-        dto.setLinks(notesEntity.getLinks());
+        dto.setImageData(notesEntity.getImageData());
         dto.setCode(notesEntity.getCode());
 
         return dto;
