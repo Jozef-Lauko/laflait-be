@@ -2,16 +2,14 @@ package sk.umb.fpv.laflait.subsection.service;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import sk.umb.fpv.laflait.notes.service.NotesRequestDTO;
 
 public class SubsectionRequestDTO {
     @NotBlank(message = "Title must not be empty.")
     private String title;
     @NotBlank(message = "Text must not be empty.")
     private String text;
-    @NotNull
-    private Long sectionID;
-    @NotNull
-    private Long notesID;
+    private NotesRequestDTO notes;
     public String getTitle() {
         return title;
     }
@@ -28,19 +26,11 @@ public class SubsectionRequestDTO {
         this.text = text;
     }
 
-    public Long getSectionID() {
-        return sectionID;
+    public NotesRequestDTO getNotes() {
+        return notes;
     }
 
-    public void setSectionID(Long sectionID) {
-        this.sectionID = sectionID;
-    }
-
-    public Long getNotesID() {
-        return notesID;
-    }
-
-    public void setNotesID(Long notesID) {
-        this.notesID = notesID;
+    public void setNotes(NotesRequestDTO notes) {
+        this.notes = notes;
     }
 }

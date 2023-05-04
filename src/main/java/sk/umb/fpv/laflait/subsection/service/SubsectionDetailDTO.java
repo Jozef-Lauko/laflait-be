@@ -12,9 +12,7 @@ public class SubsectionDetailDTO {
 
     private String text;
 
-    private Long sectionID;
-
-    private NotesDetailDTO notesDetailDTO;
+    private NotesDetailDTO notesDTO;
 
     public Long getId() {
         return id;
@@ -40,19 +38,12 @@ public class SubsectionDetailDTO {
         this.text = text;
     }
 
-    public NotesDetailDTO getNotesDetailDTO() {
-        return notesDetailDTO;
+    public NotesDetailDTO getNotesDTO() {
+        return notesDTO;
     }
 
-    public void setNotesDetailDTO(NotesDetailDTO notesDetailDTO) {
-        this.notesDetailDTO = notesDetailDTO;
+    public void setNotesDTO(NotesDetailDTO notesDetailDTO) {
+        this.notesDTO = notesDetailDTO;
     }
 
-    public Long getSectionID() {
-        return sectionID;
-    }
-
-    public void setSectionID(Long sectionID) {
-        this.sectionID = sectionID;
-    }
 }

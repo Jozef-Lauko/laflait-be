@@ -2,16 +2,15 @@ package sk.umb.fpv.laflait.section.service;
 
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import sk.umb.fpv.laflait.exception.LaflaitApplicationException;
 import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
 import sk.umb.fpv.laflait.notes.persistance.repository.NotesRepository;
 import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
+import sk.umb.fpv.laflait.notes.service.NotesRequestDTO;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
-import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
 import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
-import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
 
 
 import java.util.ArrayList;
@@ -29,11 +28,12 @@ public class SectionService {
         this.thesesRepository = thesesRepository;
         this.notesRepository = notesRepository;
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public SectionDetailDTO getSectionByID(Long sectionId) {
         return mapToDto(getSectionEntityByID(sectionId));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     private SectionEntity getSectionEntityByID(Long id) {
         Optional<SectionEntity> entity = sectionRepository.findById(id);
 
@@ -44,6 +44,7 @@ public class SectionService {
         return entity.get();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void updateSectionByID(Long sectionId, SectionRequestDTO sectionRequestDTO) {
         SectionEntity entity = getSectionEntityByID(sectionId);
@@ -54,33 +55,25 @@ public class SectionService {
         if(!Strings.isEmpty(sectionRequestDTO.getText())) {
             entity.setText(sectionRequestDTO.getText());
         }
-        //TODO
+        entity.setNotesEntity(mapToNotesEntity(sectionRequestDTO.getNotes()));
 
         sectionRepository.save(entity);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public List<SectionDetailDTO> getSectionsByThesisID(Long thesisID) {
         return mapToDtoList(sectionRepository.findAllByTeza(thesisID));
     }
 
-    private ThesesEntity mapToThesisEntity(Long thesisID) {
-        Optional<ThesesEntity> entity = thesesRepository.findById(thesisID);
+    private NotesEntity mapToNotesEntity(NotesRequestDTO notes) {
+        NotesEntity entity = new NotesEntity();
 
-        if(entity.isPresent()) {
-            return entity.get();
-        }else{
-            throw new LaflaitApplicationException("ThesisID is invalid.");
-        }
-    }
+        entity.setId(notes.getId());
+        entity.setText(notes.getText());
+        entity.setCode(notes.getCode());
+        entity.setImageData(notes.getImageData());
 
-    private NotesEntity mapToNotesEntity(Long notesID) {
-        Optional<NotesEntity> entity = notesRepository.findById(notesID);
-
-        if(entity.isPresent()) {
-            return entity.get();
-        }else{
-            throw new LaflaitApplicationException("NotesID is invalid.");
-        }
+        return entity;
     }
 
     private List<SectionDetailDTO> mapToDtoList(Iterable<SectionEntity> sectionEntities) {
@@ -100,8 +93,20 @@ public class SectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
-        dto.setThesesID(sectionEntity.getThesesID());
-        dto.setNotesID(sectionEntity.getNotesID());
+        dto.setNotesDTO(mapToDto(Optional.ofNullable(sectionEntity.getNotesEntity())));
+
+        return dto;
+    }
+
+    private NotesDetailDTO mapToDto(Optional<NotesEntity> notesEntity){
+        NotesDetailDTO dto = new NotesDetailDTO();
+
+        if(notesEntity.isPresent()){
+            dto.setId(notesEntity.get().getId());
+            dto.setText(notesEntity.get().getText());
+            dto.setCode(notesEntity.get().getCode());
+            dto.setImageData(notesEntity.get().getImageData());
+        }
 
         return dto;
     }

@@ -24,10 +24,12 @@ public class ThesesService {
         this.thesesRepository = thesesRepository;
     }
 
-//    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public List<ThesesDetailDTO> getAllTheses() {
         return mapToDtoList(thesesRepository.findAll());
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', ROLE_USER)")
     public ThesesDetailDTO getThesisByID(Long id) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -40,6 +42,7 @@ public class ThesesService {
         return mapToDto(getThesisEntityByID(id));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     private ThesesEntity getThesisEntityByID(Long id) {
         Optional<ThesesEntity> entity = thesesRepository.findById(id);
 
@@ -50,6 +53,7 @@ public class ThesesService {
         return entity.get();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void updateThesis(Long thesisId, ThesesRequestDTO thesesRequestDTO) {
         ThesesEntity entity = getThesisEntityByID(thesisId);
@@ -81,11 +85,6 @@ public class ThesesService {
         dto.setId(thesisEntity.getId());
         dto.setTitle(thesisEntity.getTitle());
         dto.setDescription(thesisEntity.getDescription());
-
-        System.out.println("ID: " + dto.getId());
-        System.out.println("Nazov: " + dto.getTitle());
-        System.out.println("Opis: " + dto.getDescription());
-        System.out.println();
 
         return dto;
     }

@@ -24,8 +24,9 @@ public class SectionEntity {
     @Column(name = "id_teza")
     private Long thesesID;
 
-    @Column(name = "id_poznamky")
-    private Long notesID;
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "id_poznamky")
+    private NotesEntity notesEntity;
 
     public Long getId() {
         return id;
@@ -59,11 +60,11 @@ public class SectionEntity {
         this.thesesID = thesesID;
     }
 
-    public Long getNotesID() {
-        return notesID;
+    public NotesEntity getNotesEntity() {
+        return notesEntity;
     }
 
-    public void setNotesID(Long notesID) {
-        this.notesID = notesID;
+    public void setNotesEntity(NotesEntity notesEntity) {
+        this.notesEntity = notesEntity;
     }
 }

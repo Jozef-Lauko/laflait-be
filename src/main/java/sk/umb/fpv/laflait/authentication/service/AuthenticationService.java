@@ -1,6 +1,5 @@
 package sk.umb.fpv.laflait.authentication.service;
 
-import org.apache.catalina.User;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
-    private static final int TOKEN_VALIDITY_IN_MINUTES = 15;
+    private static final int TOKEN_VALIDITY_IN_MINUTES = 120;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -38,7 +37,7 @@ public class AuthenticationService {
         Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
 
         if (optionalUser.isEmpty()) {
-            throw new AuthenticationCredentialsNotFoundException("Username and/or password do not match!");
+            throw new AuthenticationCredentialsNotFoundException("Username and/or password are blank!");
         }
 
         if ( ! passwordEncoder.matches(password,
@@ -51,7 +50,7 @@ public class AuthenticationService {
         token.setToken(randomString);
         token.setUser(optionalUser.get());
         token.setCreated(LocalDateTime.now());
-        token.setId((long) 1);
+        token.setId(System.currentTimeMillis());
 
         tokenRepository.save(token);
 
@@ -62,7 +61,7 @@ public class AuthenticationService {
     public UserRolesDTO authenticate(String token) {
         Optional<TokenEntity> optionalToken = tokenRepository.findByToken(token);
         if (optionalToken.isEmpty()) {
-            throw new AuthenticationCredentialsNotFoundException("Authentication failed!");
+            throw new AuthenticationCredentialsNotFoundException("Authentication failed! in: authenticate()");
         }
 
         validateTokenExpiration(optionalToken.get());
@@ -84,7 +83,7 @@ public class AuthenticationService {
         LocalDateTime tokenExpiration = token.getCreated().plus(TOKEN_VALIDITY_IN_MINUTES, ChronoUnit.MINUTES);
 
         if ( now.isAfter(tokenExpiration) ) {
-            throw new AuthenticationCredentialsNotFoundException("Authentication failed!");
+            throw new AuthenticationCredentialsNotFoundException("Authentication failed! in: validateTokenExpiration()");
         }
     }
 
