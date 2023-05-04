@@ -21,13 +21,12 @@ public class SectionEntity {
     @Column(name = "text_k")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_teza")
-    private ThesesEntity theses;
+    @Column(name = "id_teza")
+    private Long thesesID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "id_poznamky")
-    private NotesEntity notes;
+    private NotesEntity notesEntity;
 
     public Long getId() {
         return id;
@@ -53,19 +52,19 @@ public class SectionEntity {
         this.text = text;
     }
 
-    public ThesesEntity getTheses() {
-        return theses;
+    public Long getThesesID() {
+        return thesesID;
     }
 
-    public void setTheses(ThesesEntity theses) {
-        this.theses = theses;
+    public void setThesesID(Long thesesID) {
+        this.thesesID = thesesID;
     }
 
-    public NotesEntity getNotes() {
-        return notes;
+    public NotesEntity getNotesEntity() {
+        return notesEntity;
     }
 
-    public void setNotes(NotesEntity notesEntity) {
-        this.notes = notesEntity;
+    public void setNotesEntity(NotesEntity notesEntity) {
+        this.notesEntity = notesEntity;
     }
 }

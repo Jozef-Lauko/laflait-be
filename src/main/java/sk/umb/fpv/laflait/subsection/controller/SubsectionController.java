@@ -17,14 +17,14 @@ public class SubsectionController {
         this.subsectionService = subsectionService;
     }
 
-    @GetMapping("/api/podkapitoly")
-    public List<SubsectionDetailDTO> getSubsections() {
+    @GetMapping("/api/podkapitoly/{sectionID}")
+    public List<SubsectionDetailDTO> getSubsectionsBySectionID(@PathVariable Long sectionID) {
         System.out.println("*** GET ALL SUBSECTIONS ***");
 
-        return subsectionService.getAllSubsections();
+        return subsectionService.getAllSubsectionsBySectionID(sectionID);
     }
 
-    @GetMapping("/api/podkapitoly/{subsectionId}")
+    @GetMapping("/api/podkapitoly/by/{subsectionId}")
     public SubsectionDetailDTO getSubsection(@PathVariable Long subsectionId) {
         System.out.println("*** GET SUBSECTION BY ID ***");
 

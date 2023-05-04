@@ -1,7 +1,6 @@
 package sk.umb.fpv.laflait.section.service;
 
 import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
-import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
 
 public class SectionDetailDTO {
 
@@ -11,9 +10,7 @@ public class SectionDetailDTO {
 
     private String text;
 
-    private ThesesDetailDTO thesesDetailDTO;
-
-    private NotesDetailDTO notesDetailDTO;
+    private NotesDetailDTO notesDTO;
 
     public Long getId() {
         return id;
@@ -39,19 +36,11 @@ public class SectionDetailDTO {
         this.text = text;
     }
 
-    public ThesesDetailDTO getThesesDetailDTO() {
-        return thesesDetailDTO;
+    public NotesDetailDTO getNotesDTO() {
+        return notesDTO;
     }
 
-    public void setThesesDetailDTO(ThesesDetailDTO thesesDetailDTO) {
-        this.thesesDetailDTO = thesesDetailDTO;
-    }
-
-    public NotesDetailDTO getNotesDetailDTO() {
-        return notesDetailDTO;
-    }
-
-    public void setNotesDetailDTO(NotesDetailDTO notesDetailDTO) {
-        this.notesDetailDTO = notesDetailDTO;
+    public void setNotesDTO(NotesDetailDTO notesDTO) {
+        this.notesDTO = notesDTO;
     }
 }

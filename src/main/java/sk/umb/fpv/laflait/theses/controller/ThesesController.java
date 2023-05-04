@@ -10,6 +10,7 @@ import sk.umb.fpv.laflait.theses.service.ThesesService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class ThesesController {
     private ThesesService thesesService;
 

@@ -2,6 +2,7 @@ package sk.umb.fpv.laflait.section.service;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import sk.umb.fpv.laflait.notes.service.NotesRequestDTO;
 
 public class SectionRequestDTO {
 
@@ -9,10 +10,7 @@ public class SectionRequestDTO {
     private String title;
     @NotBlank(message = "Text must not be empty.")
     private String text;
-    @NotNull
-    private Long thesisID;
-    @NotNull
-    private Long notesID;
+    private NotesRequestDTO notes;
 
     public String getTitle() {
         return title;
@@ -30,19 +28,11 @@ public class SectionRequestDTO {
         this.text = text;
     }
 
-    public Long getThesisID() {
-        return thesisID;
+    public NotesRequestDTO getNotes() {
+        return notes;
     }
 
-    public void setThesisID(Long thesisID) {
-        this.thesisID = thesisID;
-    }
-
-    public Long getNotesID() {
-        return notesID;
-    }
-
-    public void setNotesID(Long notesID) {
-        this.notesID = notesID;
+    public void setNotes(NotesRequestDTO notes) {
+        this.notes = notes;
     }
 }

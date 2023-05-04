@@ -2,11 +2,13 @@ package sk.umb.fpv.laflait.subsection.service;
 
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.exception.LaflaitApplicationException;
 import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
 import sk.umb.fpv.laflait.notes.persistance.repository.NotesRepository;
 import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
+import sk.umb.fpv.laflait.notes.service.NotesRequestDTO;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
@@ -31,15 +33,17 @@ public class SubsectionService {
         this.notesRepository = notesRepository;
     }
 
-
-    public List<SubsectionDetailDTO> getAllSubsections() {
-        return mapToDtoList(subsectionRepository.findAll());
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public List<SubsectionDetailDTO> getAllSubsectionsBySectionID(Long sectionID) {
+        return mapToDtoList(subsectionRepository.findAllByKapitola(sectionID));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public SubsectionDetailDTO getSubsectionByID(Long subsectionId) {
         return mapToDto(getSubsectionEntityByID(subsectionId));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     private SubsectionEntity getSubsectionEntityByID(Long Id) {
         Optional<SubsectionEntity> entity = subsectionRepository.findById(Id);
 
@@ -50,6 +54,7 @@ public class SubsectionService {
         return entity.get();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public void updateSubsectionByID(Long subsectionId, SubsectionRequestDTO subsectionRequestDTO) {
         SubsectionEntity entity = getSubsectionEntityByID(subsectionId);
@@ -61,38 +66,20 @@ public class SubsectionService {
         if(!Strings.isEmpty(subsectionRequestDTO.getText())) {
             entity.setText(subsectionRequestDTO.getText());
         }
-
-        if(subsectionRequestDTO.getSectionID() != null) {
-            SectionEntity sectionEntity = mapToEntity(subsectionRequestDTO.getSectionID());
-            entity.setSection(sectionEntity);
-        }
-
-        if(subsectionRequestDTO.getNotesID() != null) {
-            NotesEntity notesEntity = mapToNotesEntity(subsectionRequestDTO.getNotesID());
-            entity.setNotes(notesEntity);
-        }
+        entity.setNotesEntity(mapToNotesEntity(subsectionRequestDTO.getNotes()));
 
         subsectionRepository.save(entity);
     }
 
-    private SectionEntity mapToEntity(Long sectionID) {
-        Optional<SectionEntity> entity = sectionRepository.findById(sectionID);
+    private NotesEntity mapToNotesEntity(NotesRequestDTO notes) {
+        NotesEntity entity = new NotesEntity();
 
-        if(entity.isPresent()) {
-            return entity.get();
-        }else{
-            throw new LaflaitApplicationException("SectionID is invalid.");
-        }
-    }
+        entity.setId(notes.getId());
+        entity.setText(notes.getText());
+        entity.setCode(notes.getCode());
+        entity.setImageData(notes.getImageData());
 
-    private NotesEntity mapToNotesEntity(Long notesID) {
-        Optional<NotesEntity> entity = notesRepository.findById(notesID);
-
-        if(entity.isPresent()) {
-            return entity.get();
-        }else{
-            throw new LaflaitApplicationException("NotesID is invalid.");
-        }
+        return entity;
     }
 
     private List<SubsectionDetailDTO> mapToDtoList(Iterable<SubsectionEntity> subsectionEntities) {
@@ -112,50 +99,18 @@ public class SubsectionService {
         dto.setId(subsectionEntity.getId());
         dto.setTitle(subsectionEntity.getTitle());
         dto.setText(subsectionEntity.getText());
-
-        if(subsectionEntity.getSection() != null){
-            dto.setSectionDetailDTO(mapToDto(subsectionEntity.getSection()));
-        }else{
-            dto.setSectionDetailDTO(new SectionDetailDTO());
-        }
-
-        if(subsectionEntity.getNotes() != null) {
-            dto.setNotesDetailDTO(mapToDto(subsectionEntity.getNotes()));
-        }else{
-            dto.setNotesDetailDTO(new NotesDetailDTO());
-        }
+        dto.setNotesDTO(mapToDto(Optional.ofNullable(subsectionEntity.getNotesEntity())));
 
         return dto;
     }
 
-    private NotesDetailDTO mapToDto(NotesEntity notesEntity) {
+    private NotesDetailDTO mapToDto(Optional<NotesEntity> notesEntity) {
         NotesDetailDTO dto = new NotesDetailDTO();
 
-        dto.setId(notesEntity.getId());
-        dto.setText(notesEntity.getText());
-        dto.setCode(notesEntity.getCode());
-        dto.setImageData(notesEntity.getImageData());
-
-        return dto;
-    }
-
-    private SectionDetailDTO mapToDto(SectionEntity sectionEntity) {
-        SectionDetailDTO dto = new SectionDetailDTO();
-
-        dto.setId(sectionEntity.getId());
-        dto.setTitle(sectionEntity.getTitle());
-        dto.setText(sectionEntity.getText());
-        dto.setThesesDetailDTO(mapToDto(sectionEntity.getTheses()));
-
-        return dto;
-    }
-
-    private ThesesDetailDTO mapToDto(ThesesEntity thesesEntity) {
-        ThesesDetailDTO dto = new ThesesDetailDTO();
-
-        dto.setId(thesesEntity.getId());
-        dto.setTitle(thesesEntity.getTitle());
-        dto.setDescription(thesesEntity.getDescription());
+        dto.setId(notesEntity.get().getId());
+        dto.setText(notesEntity.get().getText());
+        dto.setCode(notesEntity.get().getCode());
+        dto.setImageData(notesEntity.get().getImageData());
 
         return dto;
     }

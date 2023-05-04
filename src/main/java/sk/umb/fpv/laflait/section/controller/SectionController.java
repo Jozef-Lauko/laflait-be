@@ -17,14 +17,14 @@ public class SectionController {
         this.sectionService = sectionService;
     }
 
-    @GetMapping("/api/kapitoly")
-    public List<SectionDetailDTO> getSections() {
+    @GetMapping("/api/kapitoly/{thesisID}")
+    public List<SectionDetailDTO> getSectionsByThesisID(@PathVariable Long thesisID) {
         System.out.println("*** GET ALL SECTIONS ***");
 
-        return sectionService.getAllSections();
+        return sectionService.getSectionsByThesisID(thesisID);
     }
 
-    @GetMapping("/api/kapitoly/{sectionId}")
+    @GetMapping("/api/kapitoly/by/{sectionId}")
     public SectionDetailDTO getSection(@PathVariable Long sectionId) {
         System.out.println("*** GET SECTION BY ID ***");
 
