@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import sk.umb.fpv.laflait.section.service.SectionDetailDTO;
 import sk.umb.fpv.laflait.section.service.SectionRequestDTO;
 import sk.umb.fpv.laflait.section.service.SectionService;
-import sk.umb.fpv.laflait.theses.service.ThesesDetailDTO;
 
 import java.util.List;
 
