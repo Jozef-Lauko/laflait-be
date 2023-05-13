@@ -29,15 +29,8 @@ public class ThesesService {
         return mapToDtoList(thesesRepository.findAll());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', ROLE_USER)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ThesesDetailDTO getThesisByID(Long id) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                System.out.println(authority.getAuthority());
-            }
-        }
 
         return mapToDto(getThesisEntityByID(id));
     }
