@@ -1,9 +1,9 @@
 package sk.umb.fpv.laflait.testQuestions.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 import sk.umb.fpv.laflait.testQuestions.service.TestQuestionDetailDTO;
+import sk.umb.fpv.laflait.testQuestions.service.TestQuestionRequestDTO;
 import sk.umb.fpv.laflait.testQuestions.service.TestQuestionService;
 
 import java.util.List;
@@ -20,5 +20,10 @@ public class TestQuestionController {
         System.out.println("*** GET ALL QUESTIONS BY TEST ID ***");
 
         return testQuestionService.getQuestionsByTestID(testID);
+    }
+
+    @PostMapping("/api/test/{testID}")
+    public void submitTestQuestions(@Valid @RequestBody TestQuestionRequestDTO testQuestionRequestDTO, @PathVariable Long testID) {
+        testQuestionService.processAnswers(testID, testQuestionRequestDTO);
     }
 }

@@ -1,9 +1,6 @@
 package sk.umb.fpv.laflait.testQuestions.persistance.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity(name = "Otazky")
 @Table(name = "otazky")
