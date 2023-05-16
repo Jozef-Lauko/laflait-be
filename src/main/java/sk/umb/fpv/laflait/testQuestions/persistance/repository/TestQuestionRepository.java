@@ -16,5 +16,6 @@ public interface TestQuestionRepository extends CrudRepository<TestQuestionEntit
     List<TestQuestionEntity> findAllByTest(@Param("testID") Long testID);
 
     @Query("SELECT q.id, q.correctAnswer FROM Otazky q WHERE q.testID = :testID")
-    List<CorrectAnswers> findCorrectByTest(@Param("testID") Long testID);
+    List<Object[]> findCorrectByTest(@Param("testID") Long testID);
+
 }

@@ -1,5 +1,6 @@
 package sk.umb.fpv.laflait.testQuestions.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.testQuestions.persistance.entity.TestQuestionEntity;
@@ -51,39 +52,58 @@ public class TestQuestionService {
         return dto;
     }
 
+    @Transactional
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public void processAnswers(Long testID, TestQuestionRequestDTO answers) {
-        List<CorrectAnswers> correctAnswers = questionRepository.findCorrectByTest(testID);
+        List<CorrectAnswers> correctAnswers = new ArrayList<>();
+        List<Object[]> tuples = questionRepository.findCorrectByTest(testID);
+        for (Object[] tuple : tuples) {
+            Long id = (Long) tuple[0];
+            String answer = (String) tuple[1];
+            CorrectAnswers correctAnswer = new CorrectAnswers();
+            correctAnswer.setCorrectAnswer(answer);
+            correctAnswer.setQuestionId(id);
+            correctAnswers.add(correctAnswer);
+        }
+
+        List<UserAnswerEntity> result = userAnswerRepository.getAllByIdTestAndIdUser(answers.getUserId(), testID);
+
+        if(result.size() > 0){
+            userAnswerRepository.deleteAllByIdTestAndIdUser(answers.getUserId(), testID);
+        }
+
         String[] ans = answers.getAnswer();
+        Long[] ids= answers.getQuestionId();
+        int numberOfCorrectAnswers = 0;
 
         for (int i = 0; i < ans.length; i++) {
             boolean found = false;
             for (CorrectAnswers correctAnswer : correctAnswers) {
                 if (Objects.equals(correctAnswer.getCorrectAnswer(), ans[i])) {
                     // correct answer
-                    UserAnswerEntity entity = mapToEntity(ans[i], "Spravne", answers.getQuestionId(), answers.getUserId());
+                    UserAnswerEntity entity = mapToEntity(ans[i], "Spravne", ids[i], answers.getUserId(), testID);
                     userAnswerRepository.save(entity);
                     found = true;
+                    numberOfCorrectAnswers++;
                     break;
                 }
             }
             if (!found) {
                 // incorrect answer
-                UserAnswerEntity entity = mapToEntity(ans[i], "Nespravne", answers.getQuestionId(), answers.getUserId());
+                UserAnswerEntity entity = mapToEntity(ans[i], "Nespravne", ids[i], answers.getUserId(), testID);
                 userAnswerRepository.save(entity);
             }
         }
     }
 
-    private UserAnswerEntity mapToEntity(String answer, String result, Long questionID, Long userID){
+    private UserAnswerEntity mapToEntity(String answer, String result, Long questionID, Long userID, Long testID){
         UserAnswerEntity entity = new UserAnswerEntity();
 
         entity.setAnswer(answer);
         entity.setResult(result);
         entity.setQuestionId(questionID);
         entity.setUserId(userID);
-        //TODO ZISTIT USER ID PRIAMO Z BE
-        //TODO PREMAZAT USER_ODPOVEDE KED UROBI NOVY TEST
+        entity.setTestId(testID);
 
         return entity;
     }

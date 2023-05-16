@@ -1,15 +1,16 @@
 package sk.umb.fpv.laflait.testQuestions.service;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class TestQuestionRequestDTO {
 
-    @NotBlank(message = "Answers must not be empty.")
+    @NotEmpty(message = "Answers must not be empty.")
     private String[] answer;
-    @NotBlank(message = "userId must not be empty.")
+    @NotNull(message = "userId must not be null.")
     private Long userId;
-    @NotBlank(message = "questionId must not be empty.")
-    private Long questionId;
+    @NotEmpty(message = "userId must not be null.")
+    private Long[] questionId;
 
     public String[] getAnswer() {
         return answer;
@@ -27,11 +28,11 @@ public class TestQuestionRequestDTO {
         this.userId = userId;
     }
 
-    public Long getQuestionId() {
+    public Long[] getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(Long questionId) {
+    public void setQuestionId(Long[] questionId) {
         this.questionId = questionId;
     }
 }

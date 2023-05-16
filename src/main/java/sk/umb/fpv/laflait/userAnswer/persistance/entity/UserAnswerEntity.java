@@ -23,6 +23,9 @@ public class UserAnswerEntity {
     @Column(name = "id_otazka")
     private Long questionId;
 
+    @Column(name = "id_test")
+    private Long testId;
+
     public Long getId() {
         return id;
     }
@@ -61,5 +64,13 @@ public class UserAnswerEntity {
 
     public void setQuestionId(Long questionId) {
         this.questionId = questionId;
+    }
+
+    public Long getTestId() {
+        return testId;
+    }
+
+    public void setTestId(Long testId) {
+        this.testId = testId;
     }
 }
