@@ -3,8 +3,11 @@ package sk.umb.fpv.laflait.testQuestions.service;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import sk.umb.fpv.laflait.grades.persistance.entity.GradesEntity;
+import sk.umb.fpv.laflait.grades.persistance.repository.GradesRepository;
 import sk.umb.fpv.laflait.testQuestions.persistance.entity.TestQuestionEntity;
 import sk.umb.fpv.laflait.testQuestions.persistance.repository.TestQuestionRepository;
+import sk.umb.fpv.laflait.tests.persistance.repository.TestRepository;
 import sk.umb.fpv.laflait.userAnswer.persistance.entity.UserAnswerEntity;
 import sk.umb.fpv.laflait.userAnswer.persistance.repository.UserAnswerRepository;
 
@@ -17,10 +20,14 @@ public class TestQuestionService {
 
     private final TestQuestionRepository questionRepository;
     private final UserAnswerRepository userAnswerRepository;
+    private final GradesRepository gradesRepository;
+    private final TestRepository testRepository;
 
-    public TestQuestionService(TestQuestionRepository questionRepository, UserAnswerRepository userAnswerRepository) {
+    public TestQuestionService(TestQuestionRepository questionRepository, UserAnswerRepository userAnswerRepository, GradesRepository gradesRepository, TestRepository testRepository) {
         this.questionRepository = questionRepository;
         this.userAnswerRepository = userAnswerRepository;
+        this.gradesRepository = gradesRepository;
+        this.testRepository = testRepository;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
@@ -94,6 +101,45 @@ public class TestQuestionService {
                 userAnswerRepository.save(entity);
             }
         }
+
+        gradesRepository.save(mapToEntity(testID, answers.getUserId(), getGrade(numberOfCorrectAnswers)));
+    }
+
+    private GradesEntity mapToEntity(Long testID, Long userId, String grade) {
+        GradesEntity entity = new GradesEntity();
+
+        entity.setTestId(testID);
+        entity.setUserId(userId);
+        entity.setGrade(grade);
+
+        return entity;
+    }
+
+    private String getGrade(int numberOfCorrectAnswers) {
+        int totalQuestions = 10;
+        double percentage = (double) numberOfCorrectAnswers / totalQuestions * 100;
+        String letterGrade;
+
+        switch ((int) percentage / 10) {
+            case 10:
+            case 9:
+                letterGrade = "A";
+                break;
+            case 8:
+                letterGrade = "B";
+                break;
+            case 7:
+                letterGrade = "C";
+                break;
+            case 6:
+                letterGrade = "D";
+                break;
+            default:
+                letterGrade = "F";
+                break;
+        }
+
+        return letterGrade;
     }
 
     private UserAnswerEntity mapToEntity(String answer, String result, Long questionID, Long userID, Long testID){

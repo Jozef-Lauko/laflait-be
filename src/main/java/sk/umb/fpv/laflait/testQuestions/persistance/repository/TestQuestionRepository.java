@@ -5,7 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import sk.umb.fpv.laflait.testQuestions.persistance.entity.TestQuestionEntity;
-import sk.umb.fpv.laflait.testQuestions.service.CorrectAnswers;
 
 import java.util.List;
 
