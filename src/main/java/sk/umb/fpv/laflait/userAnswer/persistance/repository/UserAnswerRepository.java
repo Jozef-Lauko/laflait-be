@@ -12,10 +12,11 @@ import java.util.List;
 @Repository
 public interface UserAnswerRepository extends CrudRepository<UserAnswerEntity, Long> {
     @Modifying
-    @Query("DELETE FROM User_odpovede u WHERE u.userId = :userID AND u.testId = :testID")
+    @Query("DELETE FROM User_odpovede u WHERE u.userEntity.id = :userID AND u.testEntity.id = :testID")
     void deleteAllByIdTestAndIdUser(@Param("userID") Long userID, @Param("testID") Long testID);
 
-    @Query("SELECT u FROM User_odpovede u WHERE u.userId = :userID AND u.testId = :testID")
+
+    @Query("SELECT u FROM User_odpovede u WHERE u.userEntity.id = :userID AND u.testEntity.id = :testID")
     List<UserAnswerEntity> getAllByIdTestAndIdUser(@Param("userID") Long userID, @Param("testID") Long testID);
 
 }

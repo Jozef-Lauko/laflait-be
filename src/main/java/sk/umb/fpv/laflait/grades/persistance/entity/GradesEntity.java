@@ -1,6 +1,8 @@
 package sk.umb.fpv.laflait.grades.persistance.entity;
 
 import jakarta.persistence.*;
+import sk.umb.fpv.laflait.authentication.persistance.entity.UserEntity;
+import sk.umb.fpv.laflait.tests.persistance.entity.TestEntity;
 
 @Entity(name = "Znamky")
 @Table(name = "znamky")
@@ -11,11 +13,13 @@ public class GradesEntity {
     @Column(name = "id_znamka")
     private Long id;
 
-    @Column(name = "id_test")
-    private Long testId;
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "id_user")
+    private UserEntity userEntity;
 
-    @Column(name = "id_user")
-    private Long userId;
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "id_test")
+    private TestEntity testEntity;
 
     @Column(name = "znamka_text")
     private String grade;
@@ -36,19 +40,19 @@ public class GradesEntity {
         this.grade = grade;
     }
 
-    public Long getTestId() {
-        return testId;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setTestId(Long testId) {
-        this.testId = testId;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
-    public Long getUserId() {
-        return userId;
+    public TestEntity getTestEntity() {
+        return testEntity;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setTestEntity(TestEntity testEntity) {
+        this.testEntity = testEntity;
     }
 }

@@ -37,11 +37,11 @@ public class UserAnswerService {
         UserAnswerDTO dto = new UserAnswerDTO();
 
         dto.setId(userAnswerEntity.getId());
-        dto.setUserId(userAnswerEntity.getUserId());
-        dto.setQuestionId(userAnswerEntity.getQuestionId());
-        dto.setTestId(userAnswerEntity.getTestId());
         dto.setResult(userAnswerEntity.getResult());
-
+        dto.setUserName(userAnswerEntity.getUserEntity().getUsername());
+        dto.setQuestionDescription(userAnswerEntity.getTestQuestionEntity().getQuestionDespricption());
+        dto.setAnswer(userAnswerEntity.getAnswer());
         return dto;
     }
+
 }

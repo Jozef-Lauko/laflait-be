@@ -2,8 +2,8 @@ package sk.umb.fpv.laflait.grades.service;
 
 public class GradesDetailDTO {
     private Long id;
-    private Long testId;
-    private Long userId;
+    private String userName;
+    private String testDescription;
     private String grade;
 
     public Long getId() {
@@ -14,27 +14,27 @@ public class GradesDetailDTO {
         this.id = id;
     }
 
-    public Long getTestId() {
-        return testId;
-    }
-
-    public void setTestId(Long testId) {
-        this.testId = testId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     public String getGrade() {
         return grade;
     }
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getTestDescription() {
+        return testDescription;
+    }
+
+    public void setTestDescription(String testDescription) {
+        this.testDescription = testDescription;
     }
 }

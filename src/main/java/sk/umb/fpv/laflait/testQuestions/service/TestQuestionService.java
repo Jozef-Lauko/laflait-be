@@ -3,10 +3,13 @@ package sk.umb.fpv.laflait.testQuestions.service;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import sk.umb.fpv.laflait.authentication.persistance.entity.UserEntity;
+import sk.umb.fpv.laflait.authentication.persistance.repository.UserRepository;
 import sk.umb.fpv.laflait.grades.persistance.entity.GradesEntity;
 import sk.umb.fpv.laflait.grades.persistance.repository.GradesRepository;
 import sk.umb.fpv.laflait.testQuestions.persistance.entity.TestQuestionEntity;
 import sk.umb.fpv.laflait.testQuestions.persistance.repository.TestQuestionRepository;
+import sk.umb.fpv.laflait.tests.persistance.entity.TestEntity;
 import sk.umb.fpv.laflait.tests.persistance.repository.TestRepository;
 import sk.umb.fpv.laflait.userAnswer.persistance.entity.UserAnswerEntity;
 import sk.umb.fpv.laflait.userAnswer.persistance.repository.UserAnswerRepository;
@@ -14,6 +17,7 @@ import sk.umb.fpv.laflait.userAnswer.persistance.repository.UserAnswerRepository
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class TestQuestionService {
@@ -22,12 +26,14 @@ public class TestQuestionService {
     private final UserAnswerRepository userAnswerRepository;
     private final GradesRepository gradesRepository;
     private final TestRepository testRepository;
+    private final UserRepository userRepository;
 
-    public TestQuestionService(TestQuestionRepository questionRepository, UserAnswerRepository userAnswerRepository, GradesRepository gradesRepository, TestRepository testRepository) {
+    public TestQuestionService(TestQuestionRepository questionRepository, UserAnswerRepository userAnswerRepository, GradesRepository gradesRepository, TestRepository testRepository, UserRepository userRepository) {
         this.questionRepository = questionRepository;
         this.userAnswerRepository = userAnswerRepository;
         this.gradesRepository = gradesRepository;
         this.testRepository = testRepository;
+        this.userRepository = userRepository;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
@@ -64,6 +70,7 @@ public class TestQuestionService {
     public void processAnswers(Long testID, TestQuestionRequestDTO answers) {
         List<CorrectAnswers> correctAnswers = new ArrayList<>();
         List<Object[]> tuples = questionRepository.findCorrectByTest(testID);
+
         for (Object[] tuple : tuples) {
             Long id = (Long) tuple[0];
             String answer = (String) tuple[1];
@@ -107,9 +114,14 @@ public class TestQuestionService {
 
     private GradesEntity mapToEntity(Long testID, Long userId, String grade) {
         GradesEntity entity = new GradesEntity();
+        Optional<UserEntity> userEntity = userRepository.findById(userId);
+        Optional<TestEntity> testEntity = testRepository.findById(testID);
 
-        entity.setTestId(testID);
-        entity.setUserId(userId);
+        if(userEntity.isPresent() && testEntity.isPresent()){
+            entity.setUserEntity(userEntity.get());
+            entity.setTestEntity(testEntity.get());
+        }
+
         entity.setGrade(grade);
 
         return entity;
@@ -145,11 +157,18 @@ public class TestQuestionService {
     private UserAnswerEntity mapToEntity(String answer, String result, Long questionID, Long userID, Long testID){
         UserAnswerEntity entity = new UserAnswerEntity();
 
+        Optional<UserEntity> userEntity = userRepository.findById(userID);
+        Optional<TestEntity> testEntity = testRepository.findById(testID);
+        Optional<TestQuestionEntity> questionEntity = questionRepository.findById(questionID);
+
         entity.setAnswer(answer);
         entity.setResult(result);
-        entity.setQuestionId(questionID);
-        entity.setUserId(userID);
-        entity.setTestId(testID);
+
+        if(userEntity.isPresent() && testEntity.isPresent() && questionEntity.isPresent()){
+            entity.setUserEntity(userEntity.get());
+            entity.setTestEntity(testEntity.get());
+            entity.setTestQuestionEntity(questionEntity.get());
+        }
 
         return entity;
     }

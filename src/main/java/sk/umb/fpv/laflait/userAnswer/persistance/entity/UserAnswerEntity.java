@@ -1,6 +1,11 @@
 package sk.umb.fpv.laflait.userAnswer.persistance.entity;
 
 import jakarta.persistence.*;
+import sk.umb.fpv.laflait.authentication.persistance.entity.UserEntity;
+import sk.umb.fpv.laflait.testQuestions.persistance.entity.TestQuestionEntity;
+import sk.umb.fpv.laflait.tests.persistance.entity.TestEntity;
+
+import java.util.Optional;
 
 @Entity(name = "User_odpovede")
 @Table(name = "user_odpovede")
@@ -17,14 +22,17 @@ public class UserAnswerEntity {
     @Column(name = "hodnotenie")
     private String result;
 
-    @Column(name = "id_user")
-    private Long userId;
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "id_user")
+    private UserEntity userEntity;
 
-    @Column(name = "id_otazka")
-    private Long questionId;
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "id_test")
+    private TestEntity testEntity;
 
-    @Column(name = "id_test")
-    private Long testId;
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "id_otazka")
+    private TestQuestionEntity testQuestionEntity;
 
     public Long getId() {
         return id;
@@ -50,27 +58,27 @@ public class UserAnswerEntity {
         this.result = result;
     }
 
-    public Long getUserId() {
-        return userId;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public TestEntity getTestEntity() {
+        return testEntity;
     }
 
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
+    public void setTestEntity(TestEntity testEntity) {
+        this.testEntity = testEntity;
     }
 
-    public Long getTestId() {
-        return testId;
+    public TestQuestionEntity getTestQuestionEntity() {
+        return testQuestionEntity;
     }
 
-    public void setTestId(Long testId) {
-        this.testId = testId;
+    public void setTestQuestionEntity(TestQuestionEntity testQuestionEntity) {
+        this.testQuestionEntity = testQuestionEntity;
     }
 }

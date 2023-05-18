@@ -38,8 +38,8 @@ public class GradesService {
 
         dto.setId(gradesEntity.getId());
         dto.setGrade(gradesEntity.getGrade());
-        dto.setTestId(gradesEntity.getTestId());
-        dto.setUserId(gradesEntity.getUserId());
+        dto.setUserName(gradesEntity.getUserEntity().getUsername());
+        dto.setTestDescription(gradesEntity.getTestEntity().getTestDescription());
 
         return dto;
     }

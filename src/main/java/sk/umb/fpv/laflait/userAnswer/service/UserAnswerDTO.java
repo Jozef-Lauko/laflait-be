@@ -3,10 +3,10 @@ package sk.umb.fpv.laflait.userAnswer.service;
 public class UserAnswerDTO {
 
     private Long id;
+    private String userName;
+    private String questionDescription;
     private String result;
-    private Long userId;
-    private Long questionId;
-    private Long testId;
+    private String answer;
 
     public Long getId() {
         return id;
@@ -24,27 +24,27 @@ public class UserAnswerDTO {
         this.result = result;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public Long getQuestionId() {
-        return questionId;
+    public String getQuestionDescription() {
+        return questionDescription;
     }
 
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
+    public void setQuestionDescription(String questionDescription) {
+        this.questionDescription = questionDescription;
     }
 
-    public Long getTestId() {
-        return testId;
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setTestId(Long testId) {
-        this.testId = testId;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }
