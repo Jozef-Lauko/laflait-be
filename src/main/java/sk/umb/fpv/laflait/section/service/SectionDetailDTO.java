@@ -10,7 +10,12 @@ public class SectionDetailDTO {
 
     private String text;
 
-    private NotesDetailDTO notesDTO;
+    private Long notesid;
+    private String notestext;
+    private String notescode;
+    private byte[] notesimageData;
+
+    private boolean haveSubsection;
 
     public Long getId() {
         return id;
@@ -36,11 +41,43 @@ public class SectionDetailDTO {
         this.text = text;
     }
 
-    public NotesDetailDTO getNotesDTO() {
-        return notesDTO;
+    public Long getNotesid() {
+        return notesid;
     }
 
-    public void setNotesDTO(NotesDetailDTO notesDTO) {
-        this.notesDTO = notesDTO;
+    public void setNotesid(Long notesid) {
+        this.notesid = notesid;
+    }
+
+    public String getNotestext() {
+        return notestext;
+    }
+
+    public void setNotestext(String notestext) {
+        this.notestext = notestext;
+    }
+
+    public String getNotescode() {
+        return notescode;
+    }
+
+    public void setNotescode(String notescode) {
+        this.notescode = notescode;
+    }
+
+    public byte[] getNotesimageData() {
+        return notesimageData;
+    }
+
+    public void setNotesimageData(byte[] notesimageData) {
+        this.notesimageData = notesimageData;
+    }
+
+    public boolean isHaveSubsection() {
+        return haveSubsection;
+    }
+
+    public void setHaveSubsection(boolean haveSubsection) {
+        this.haveSubsection = haveSubsection;
     }
 }

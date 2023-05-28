@@ -66,18 +66,26 @@ public class SubsectionService {
         if(!Strings.isEmpty(subsectionRequestDTO.getText())) {
             entity.setText(subsectionRequestDTO.getText());
         }
-        entity.setNotesEntity(mapToNotesEntity(subsectionRequestDTO.getNotes()));
+        entity.setNotesEntity(mapToNotesEntity(subsectionRequestDTO.getNotesid(), subsectionRequestDTO.getNotestext(), subsectionRequestDTO.getNotescode(), subsectionRequestDTO.getNotesimageData()));
+
 
         subsectionRepository.save(entity);
     }
 
-    private NotesEntity mapToNotesEntity(NotesRequestDTO notes) {
+    private NotesEntity mapToNotesEntity(Long notesid, String notestext, String notescode, byte[] notesimageData) {
         NotesEntity entity = new NotesEntity();
 
-        entity.setId(notes.getId());
-        entity.setText(notes.getText());
-        entity.setCode(notes.getCode());
-        entity.setImageData(notes.getImageData());
+        if(notesid == null){
+            entity.setId((long) -1);
+            notesimageData = new byte[0];
+            entity.setImageData(notesimageData);
+        }else{
+            entity.setId(notesid);
+            entity.setImageData(notesimageData);
+        }
+
+        entity.setCode(notescode);
+        entity.setText(notestext);
 
         return entity;
     }
@@ -99,7 +107,14 @@ public class SubsectionService {
         dto.setId(subsectionEntity.getId());
         dto.setTitle(subsectionEntity.getTitle());
         dto.setText(subsectionEntity.getText());
-        dto.setNotesDTO(mapToDto(Optional.ofNullable(subsectionEntity.getNotesEntity())));
+
+        NotesEntity notesEntity = subsectionEntity.getNotesEntity();
+        if (notesEntity != null) {
+            dto.setNotesid(notesEntity.getId());
+            dto.setNotestext(notesEntity.getText());
+            dto.setNotescode(notesEntity.getCode());
+            dto.setNotesimageData(notesEntity.getImageData());
+        }
 
         return dto;
     }

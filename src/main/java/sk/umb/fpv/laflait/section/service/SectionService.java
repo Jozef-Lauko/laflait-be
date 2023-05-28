@@ -5,12 +5,10 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.notes.persistance.entity.NotesEntity;
-import sk.umb.fpv.laflait.notes.persistance.repository.NotesRepository;
 import sk.umb.fpv.laflait.notes.service.NotesDetailDTO;
-import sk.umb.fpv.laflait.notes.service.NotesRequestDTO;
 import sk.umb.fpv.laflait.section.persistance.entity.SectionEntity;
 import sk.umb.fpv.laflait.section.persistance.repository.SectionRepository;
-import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
+import sk.umb.fpv.laflait.subsection.service.SubsectionService;
 
 
 import java.util.ArrayList;
@@ -20,13 +18,12 @@ import java.util.Optional;
 @Service
 public class SectionService {
     private final SectionRepository sectionRepository;
-    private final ThesesRepository thesesRepository;
-    private final NotesRepository notesRepository;
+    private final SubsectionService subsectionService;
 
-    public SectionService(SectionRepository sectionRepository, ThesesRepository thesesRepository, NotesRepository notesRepository) {
+    public SectionService(SectionRepository sectionRepository, SubsectionService subsectionService) {
         this.sectionRepository = sectionRepository;
-        this.thesesRepository = thesesRepository;
-        this.notesRepository = notesRepository;
+
+        this.subsectionService = subsectionService;
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public SectionDetailDTO getSectionByID(Long sectionId) {
@@ -55,25 +52,32 @@ public class SectionService {
         if(!Strings.isEmpty(sectionRequestDTO.getText())) {
             entity.setText(sectionRequestDTO.getText());
         }
-        entity.setNotesEntity(mapToNotesEntity(sectionRequestDTO.getNotes()));
+        entity.setNotesEntity(mapToNotesEntity(sectionRequestDTO.getNotesid(), sectionRequestDTO.getNotestext(), sectionRequestDTO.getNotescode(), sectionRequestDTO.getNotesimageData()));
 
         sectionRepository.save(entity);
+    }
+
+    private NotesEntity mapToNotesEntity(Long notesid, String notestext, String notescode, byte[] notesimageData) {
+        NotesEntity entity = new NotesEntity();
+
+        if(notesid == null){
+            entity.setId((long) -1);
+            notesimageData = new byte[0];
+            entity.setImageData(notesimageData);
+        }else{
+            entity.setId(notesid);
+            entity.setImageData(notesimageData);
+        }
+
+        entity.setCode(notescode);
+        entity.setText(notestext);
+
+        return entity;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public List<SectionDetailDTO> getSectionsByThesisID(Long thesisID) {
         return mapToDtoList(sectionRepository.findAllByTeza(thesisID));
-    }
-
-    private NotesEntity mapToNotesEntity(NotesRequestDTO notes) {
-        NotesEntity entity = new NotesEntity();
-
-        entity.setId(notes.getId());
-        entity.setText(notes.getText());
-        entity.setCode(notes.getCode());
-        entity.setImageData(notes.getImageData());
-
-        return entity;
     }
 
     private List<SectionDetailDTO> mapToDtoList(Iterable<SectionEntity> sectionEntities) {
@@ -93,7 +97,20 @@ public class SectionService {
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
         dto.setText(sectionEntity.getText());
-        dto.setNotesDTO(mapToDto(Optional.ofNullable(sectionEntity.getNotesEntity())));
+
+        NotesEntity notesEntity = sectionEntity.getNotesEntity();
+        if (notesEntity != null) {
+            dto.setNotesid(notesEntity.getId());
+            dto.setNotestext(notesEntity.getText());
+            dto.setNotescode(notesEntity.getCode());
+            dto.setNotesimageData(notesEntity.getImageData());
+        }
+
+        if(!subsectionService.getAllSubsectionsBySectionID(sectionEntity.getId()).isEmpty()) {
+            dto.setHaveSubsection(true);
+        }else{
+            dto.setHaveSubsection(false);
+        }
 
         return dto;
     }
