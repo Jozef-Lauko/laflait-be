@@ -37,4 +37,9 @@ public class ThesesController {
         System.out.println("*** UPDATE THESIS BY ID ***");
         thesesService.updateThesis(thesisId, thesesRequestDTO);
     }
+
+    @GetMapping("/api/tezy/size")
+    public int getSizeOfTheses(){
+        return thesesService.getSize();
+    }
 }

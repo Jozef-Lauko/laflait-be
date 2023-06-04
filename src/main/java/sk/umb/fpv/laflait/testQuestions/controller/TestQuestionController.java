@@ -26,4 +26,10 @@ public class TestQuestionController {
     public void submitTestQuestions(@Valid @RequestBody TestQuestionRequestDTO testQuestionRequestDTO, @PathVariable Long testID) {
         testQuestionService.processAnswers(testID, testQuestionRequestDTO);
     }
+
+    @GetMapping("/api/test/answers/{testID}")
+    public List<Object[]> getCorrectAnswers(@PathVariable Long testID) {
+        System.out.println(testQuestionService.getCorrectAnswersByID(testID).get(0));
+        return testQuestionService.getCorrectAnswersByID(testID);
+    }
 }

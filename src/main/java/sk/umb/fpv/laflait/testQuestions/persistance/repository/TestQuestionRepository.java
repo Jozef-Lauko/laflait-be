@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import sk.umb.fpv.laflait.testQuestions.persistance.entity.TestQuestionEntity;
+import sk.umb.fpv.laflait.testQuestions.service.TestQuestionDetailDTO;
 
 import java.util.List;
 
@@ -16,5 +17,4 @@ public interface TestQuestionRepository extends CrudRepository<TestQuestionEntit
 
     @Query("SELECT q.id, q.correctAnswer FROM Otazky q WHERE q.testID = :testID")
     List<Object[]> findCorrectByTest(@Param("testID") Long testID);
-
 }

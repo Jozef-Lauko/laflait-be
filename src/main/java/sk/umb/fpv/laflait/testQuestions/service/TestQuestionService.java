@@ -1,6 +1,7 @@
 package sk.umb.fpv.laflait.testQuestions.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.authentication.persistance.entity.UserEntity;
@@ -171,5 +172,9 @@ public class TestQuestionService {
         }
 
         return entity;
+    }
+
+    public List<Object[]> getCorrectAnswersByID(Long testID) {
+        return questionRepository.findCorrectByTest(testID);
     }
 }

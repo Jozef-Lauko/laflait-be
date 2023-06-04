@@ -2,11 +2,7 @@ package sk.umb.fpv.laflait.theses.service;
 
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import sk.umb.fpv.laflait.theses.persistance.entity.ThesesEntity;
 import sk.umb.fpv.laflait.theses.persistance.repository.ThesesRepository;
@@ -82,4 +78,9 @@ public class ThesesService {
         return dto;
     }
 
+    public int getSize() {
+        List<ThesesDetailDTO> theses = getAllTheses();
+
+        return theses.size();
+    }
 }
